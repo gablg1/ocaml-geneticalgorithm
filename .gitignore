@@ -7,3 +7,8 @@
 *.cmx
 *.cmxs
 *.cmxa
+
+*.native
+.DS_Store
+*.swp
+_build
