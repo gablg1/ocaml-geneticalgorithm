@@ -22,16 +22,16 @@ sig
   val run_tests : unit -> unit
 end
 
-module Guess : GUESS with type guess=polygon list =
+module Guess : GUESS with type guess=Polygon.polygon list =
 struct
 
-  type guess = polygon list
+  type guess = Polygon.polygon list
 
-  let image_of_guest g = 
+  let image_of_guess _ = Graphics.make_image (Array.make_matrix ~dimx:5 ~dimy:12 black)
 
-  let cost g i = 
+  let cost _ _ = 0.0
 
-  let map2 f xs ys =
+  let rec map2 f xs ys =
     match xs,ys with
     | [], [] -> []
     | x::xs',y::ys' -> (f x y)::(map2 f xs' ys')
@@ -39,6 +39,7 @@ struct
 
   let sexual_reproduction g1 g2 = map2 Polygon.sexual_reproduction g1 g2
 
-  let run_tests () = 
-
+  let run_tests () =
+    ()
+    
 end
