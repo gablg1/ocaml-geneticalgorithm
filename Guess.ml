@@ -1,5 +1,6 @@
 open Core.Std
 open Graphics
+open Polygon
 
 module type GUESS =
 sig
@@ -19,4 +20,25 @@ sig
   
   (* Runs tests on this Module *)
   val run_tests : unit -> unit
+end
+
+module Guess : GUESS with type guess=polygon list =
+struct
+
+  type guess = polygon list
+
+  let image_of_guest g = 
+
+  let cost g i = 
+
+  let map2 f xs ys =
+    match xs,ys with
+    | [], [] -> []
+    | x::xs',y::ys' -> (f x y)::(map2 f xs' ys')
+    | _ -> failwith "Invalid input - lists must be of equal length"
+
+  let sexual_reproduction g1 g2 = map2 Polygon.sexual_reproduction g1 g2
+
+  let run_tests () = 
+
 end

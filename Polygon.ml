@@ -20,5 +20,18 @@ sig
   val run_tests : unit -> unit
 end
 
+module Polygon : POLYGON with type polygon=((int * int) list) * color =
+struct
 
+  type polygon = ((int * int) list) * color
+
+  let points (ps,c) = ps
+
+  let color (ps,c) = c
+
+  let sexual_reproduction p1 p2 = (points p1, (color p1 + (color p2)) / 2)
+
+  let run_tests () = 
+
+end
 
