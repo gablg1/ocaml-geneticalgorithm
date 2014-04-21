@@ -3,7 +3,7 @@ open GeneticAlgorithm
 open Guess
 open Polygon
 
-assert (true) ;;
+Polygon.run_tests ();;
 
 
 
