@@ -29,16 +29,10 @@ struct
 
   let color (_,c) = c
 
-  let rec map2 f xs ys =
-    match xs,ys with
-    | [], [] -> []
-    | x::xs',y::ys' -> (f x y)::(map2 f xs' ys')
-    | _ -> failwith "Invalid input - lists must be of equal length"
-
   let halfway (x1,y1) (x2,y2) =
     ((x1 + x2) / 2, (y1 + y2) / 2)
 
-  let sexual_reproduction p1 p2 = (map2 halfway (points p1) (points p2), (color p1 + (color p2)) / 2)
+  let sexual_reproduction p1 p2 = (List.map2_exn (points p1) (points p2) ~f:halfway, (color p1 + (color p2)) / 2)
 
   let test_points () =
     let p1 = ([], blue) in
