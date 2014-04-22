@@ -8,6 +8,8 @@
 *.cmxs
 *.cmxa
 \#*
+.\#*
+*\#*
 
 *.native
 .DS_Store
