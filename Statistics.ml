@@ -24,7 +24,7 @@ struct
 
   (* Uses Box-Muller to implement pseudo-randomness *)
   let rec random () =
-    let _ = Random.self_init in
+    let _ = Random.init (Unix.time ()) in
     let u = Random.float 2.0 -. 1.0 in
     let v = Random.float 2.0 -. 1.0 in
     let s = u *. u +. v *. v in
