@@ -2,8 +2,19 @@ open Core.Std
 open GeneticAlgorithm
 open Guess
 open Polygon
+open Statistics
 
 Polygon.run_tests ();;
 
-
+print_endline (Float.to_string (Statistics.gaussian_pick 3. 1.));;
+print_endline (Float.to_string (Statistics.gaussian_pick 3. 1.));;
+print_endline (Float.to_string (Statistics.gaussian_pick 3. 1.));;
+print_endline (Float.to_string (Statistics.gaussian_pick 3. 1.));;
+print_endline (Float.to_string (Statistics.gaussian_pick 3. 1.));;
+print_endline (Float.to_string (Statistics.gaussian_pick 3. 1.));;
+print_endline (Float.to_string (Statistics.gaussian_pick 3. 1.));;
+print_endline (Float.to_string (Statistics.gaussian_pick 3. 1.));;
+print_endline (Float.to_string (Statistics.gaussian_pick 3. 1.));;
+print_endline (Float.to_string (Statistics.gaussian_pick 3. 10.));;
+print_endline (Float.to_string (Statistics.gaussian_pick 3. 100.));;
 
