@@ -6,9 +6,10 @@ sig
   type t 
 
   type std_dev 
-  
-  (* Returns a pseudorandom float between 0 and 1 *)
-  val random : unit -> t
+
+  (* Returns a pseudo-random normally distributed float 
+   * between 0 and 1*)
+  val normal : unit -> t 
 
   (* Returns a pseudorandom t in the gaussian distribution *)
   val gaussian_pick : t -> std_dev -> t
@@ -22,17 +23,16 @@ struct
 
   type std_dev = float
 
-  (* Uses Box-Muller to implement pseudo-randomness *)
-  let rec random () =
-    let _ = Random.init (Unix.time ()) in
+  (* Uses Box-Muller to return a pseudo-random *)
+  let rec normal () =
     let u = Random.float 2.0 -. 1.0 in
     let v = Random.float 2.0 -. 1.0 in
     let s = u *. u +. v *. v in
-    if (s >= 1.0 || s = 0.0) then random ()
+    if (s >= 1.0 || s = 0.0) then normal ()
     else u *. sqrt (-2.0 *. (log s) /. s)
 
   let gaussian_pick m s = 
-    let n = random () in
+    let n = normal () in
     n *. s +. m
     
 end
