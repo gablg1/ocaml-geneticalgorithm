@@ -38,11 +38,11 @@ struct
   let init_guess _ = G.fresh
 
   (* Returns a list of N random guesses *)
-  let fresh n = Array.init n init_guess
+  let fresh n = Array.init n ~f:init_guess
   
-  let kill_phase g = failwith "TODO"
+  let kill_phase _ = failwith "TODO"
 
-  let reproduction_phase g = failwith "TODO"
+  let reproduction_phase _ = failwith "TODO"
   
   (* evolve simply calls kill phase and reproduction phase on g n times *)
   let rec evolve g n =
@@ -51,7 +51,7 @@ struct
   
   
   
-  let get_best g = failwith "TODO"
+  let get_best _ = failwith "TODO"
     
 
   let run_tests () =

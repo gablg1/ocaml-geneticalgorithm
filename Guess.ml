@@ -30,7 +30,7 @@ struct
 
   type guess = Polygon.polygon list
 
-  let fresh = failwith "TODO"
+  let fresh = []
 
   let image_of_guess _ = Graphics.make_image (Array.make_matrix ~dimx:5 ~dimy:12 black)
 

@@ -30,7 +30,7 @@ struct
 
   type polygon = ((int * int) list) * color
 
-  let fresh max_x max_y = failwith "TODO"
+  let fresh _ _ = failwith "TODO"
 
   let points (ps,_) = ps
 
@@ -68,10 +68,12 @@ struct
     let p1 = ([(0,0);(1,1);(2,2);(3,3)], blue) in
     let p2 = ([(1,2);(3,4);(5,6);(7,8)], red) in
     let p3 = ([(5,12);(4,9);(9,1);(9,3)], green) in
-    assert(sexual_reproduction p1 p2 = ([(0,1);(2,2);(3,4);(5,5)], rgb (red/2) 0 (blue/2)));
-    assert(sexual_reproduction p2 p3 = ([(3,7);(3,6);(7,3);(8,5)], rgb (red/2) (green/2) 0));
-    assert(sexual_reproduction p1 p3 = ([(2,6);(2,5);(5,1);(6,3)], rgb 0 (green/2) (blue/2)));
-    print_int (blue + red + green)
+    let (r1,g1,b1) = to_rgb blue in
+    let (r2,g2,b2) = to_rgb red in
+    let (r3,g3,b3) = to_rgb green in
+    assert(sexual_reproduction p1 p2 = ([(0,1);(2,2);(3,4);(5,5)], rgb ((r1+r2)/2) ((g1+g2)/2) ((b1+b2)/2)));
+    assert(sexual_reproduction p2 p3 = ([(3,7);(3,6);(7,3);(8,5)], rgb ((r2+r3)/2) ((g2+g3)/2) ((b2+b3)/2)));
+    assert(sexual_reproduction p1 p3 = ([(2,6);(2,5);(5,1);(6,3)], rgb ((r1+r3)/2) ((g1+g3)/2) ((b1+b3)/2)))
 
   let run_tests () =
     test_points ();
