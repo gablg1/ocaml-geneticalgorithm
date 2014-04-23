@@ -7,7 +7,7 @@ sig
   type guess
 
   (* Returns a fresh new random guess *)
-  val fresh : guess
+  val fresh : int -> guess
 
   (* Returns an image of the guess *)
   val image_of_guess : guess -> image
