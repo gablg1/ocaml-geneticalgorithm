@@ -37,13 +37,10 @@ struct
   type ga = guess array
 
   (* Returns a list of N random guesses *)
-<<<<<<< HEAD
-  let fresh n = Array.init n ~f:init_guess
-=======
+
   let fresh n m =
     let init_guess i = G.fresh m in
-    Array.init n init_guess
->>>>>>> da64d2025ad1cbb1fa87d4f6ee046862ecd58b92
+    Array.init n ~f:init_guess
   
   let kill_phase _ = failwith "TODO"
 
