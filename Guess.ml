@@ -6,6 +6,9 @@ module type GUESS =
 sig
   type guess
 
+  (* Returns a fresh new random guess *)
+  val fresh : guess
+
   (* Returns an image of the guess *)
   val image_of_guess : guess -> image
   
@@ -26,6 +29,8 @@ module Guess : GUESS with type guess=Polygon.polygon list =
 struct
 
   type guess = Polygon.polygon list
+
+  let fresh = failwith "TODO"
 
   let image_of_guess _ = Graphics.make_image (Array.make_matrix ~dimx:5 ~dimy:12 black)
 

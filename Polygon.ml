@@ -10,6 +10,10 @@ sig
   (* Returns the list of points of the polygon *)
   val points : polygon -> (int * int) list
   
+  (* 'fresh a b' returns a fresh randomly initialized polygon with points all 
+   * within the rectangle delimited by (0,0) (a, b) *)
+  val fresh : int -> int -> polygon
+  
   (* Returns the color of the polygon *)
   val color : polygon -> color
   
@@ -25,6 +29,8 @@ module Polygon : POLYGON with type polygon=((int * int) list) * color =
 struct
 
   type polygon = ((int * int) list) * color
+
+  let fresh max_x max_y = failwith "TODO"
 
   let points (ps,_) = ps
 
