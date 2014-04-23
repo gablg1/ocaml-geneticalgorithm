@@ -1,5 +1,6 @@
 open Core.Std
 open Graphics
+open Statistics
 
 (* Module that performs operations on Polygons *)
 module type POLYGON =
@@ -32,7 +33,14 @@ struct
   let halfway (x1,y1) (x2,y2) =
     ((x1 + x2) / 2, (y1 + y2) / 2)
 
-  let sexual_reproduction p1 p2 = (List.map2_exn (points p1) (points p2) ~f:halfway, (color p1 + (color p2)) / 2)
+  let to_rgb c =
+    let r = c / 65536 and g = c / 256 mod 256 and b = c mod 256 in (r,g,b)
+
+  let sexual_reproduction p1 p2 = let (r1,g1,b1) = to_rgb (color p1) and (r2,g2,b2) = to_rgb (color p2) in
+				  let f = fun c1 c2 -> Int.of_float (Statistics.gaussian_pick
+				   (Float.of_int (c1 + c2) /. 2.0) 0.0) in
+				  (List.map2_exn (points p1) (points p2) ~f:halfway,
+				   rgb (f r1 r2) (f g1 g2) (f b1 b2))
 
   let test_points () =
     let p1 = ([], blue) in
@@ -54,9 +62,10 @@ struct
     let p1 = ([(0,0);(1,1);(2,2);(3,3)], blue) in
     let p2 = ([(1,2);(3,4);(5,6);(7,8)], red) in
     let p3 = ([(5,12);(4,9);(9,1);(9,3)], green) in
-    assert(sexual_reproduction p1 p2 = ([(0,1);(2,2);(3,4);(5,5)],(blue+red)/2));
-    assert(sexual_reproduction p2 p3 = ([(3,7);(3,6);(7,3);(8,5)],(red+green)/2));
-    assert(sexual_reproduction p1 p3 = ([(2,6);(2,5);(5,1);(6,3)],(blue+green)/2))
+    assert(sexual_reproduction p1 p2 = ([(0,1);(2,2);(3,4);(5,5)], rgb (red/2) 0 (blue/2)));
+    assert(sexual_reproduction p2 p3 = ([(3,7);(3,6);(7,3);(8,5)], rgb (red/2) (green/2) 0));
+    assert(sexual_reproduction p1 p3 = ([(2,6);(2,5);(5,1);(6,3)], rgb 0 (green/2) (blue/2)));
+    print_int (blue + red + green)
 
   let run_tests () =
     test_points ();
