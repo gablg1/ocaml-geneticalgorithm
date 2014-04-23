@@ -37,9 +37,8 @@ struct
   type ga = guess array
 
   (* Returns a list of N random guesses *)
-
   let fresh n m =
-    let init_guess i = G.fresh m in
+    let init_guess _ = G.fresh m in
     Array.init n ~f:init_guess
   
   let kill_phase _ = failwith "TODO"
@@ -50,11 +49,8 @@ struct
   let rec evolve g n =
     if n <= 0 then g 
     else evolve (reproduction_phase (kill_phase g)) (n - 1)
-  
-  
-  
-  let get_best _ = failwith "TODO"
-    
+
+  let get_best _ = failwith "TODO" 
 
   let run_tests () =
     ()
