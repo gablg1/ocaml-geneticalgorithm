@@ -2,7 +2,6 @@ open Core.Std
 open GeneticAlgorithm
 open Guess
 open Polygon
-open Cost
 open Statistics
 
 (* Initializes randomness using current timestamp *)

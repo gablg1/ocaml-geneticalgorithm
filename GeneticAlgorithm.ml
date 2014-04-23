@@ -10,8 +10,9 @@ sig
   (* Type of the Genetic Algorithm *)
   type ga
   
-  (* Returns a fresh new Genetic Algorithm with n guesses *)
-  val fresh : int -> ga
+  (* fresh n m returns a fresh new Genetic Algorithm with n guesses 
+   * each containing m polygons *)
+  val fresh : int -> int -> ga
 
   (* 'evolve g n' performs the genetic algorithm for n generations *)
   val evolve : ga -> int -> ga
@@ -35,10 +36,10 @@ struct
 
   type ga = guess array
 
-  let init_guess _ = G.fresh
-
   (* Returns a list of N random guesses *)
-  let fresh n = Array.init n init_guess
+  let fresh n m =
+    let init_guess i = G.fresh m in
+    Array.init n init_guess
   
   let kill_phase g = failwith "TODO"
 
