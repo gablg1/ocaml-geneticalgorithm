@@ -17,9 +17,9 @@ sig
   (* Returns the color of the polygon *)
   val color : polygon -> color
   
-  (* Performs sexual reproduction between two polygons
-   * outputing a daughter polygon *)
-  val sexual_reproduction : polygon -> polygon -> polygon
+  (* 'sexual_reproduction p1 p2 c' returns a polygon
+   * daughter of p1 and p2 with crossing over level of c *)
+  val sexual_reproduction : float -> polygon -> polygon -> polygon
   
   (* Runs tests on this Module *)
   val run_tests : unit -> unit
@@ -42,9 +42,11 @@ struct
   let to_rgb c =
     let r = c / 65536 and g = c / 256 mod 256 and b = c mod 256 in (r,g,b)
 
-  let sexual_reproduction p1 p2 = let (r1,g1,b1) = to_rgb (color p1) and (r2,g2,b2) = to_rgb (color p2) in
+  let sexual_reproduction std_dev p1 p2 = 
+    let (r1,g1,b1) = to_rgb (color p1) 
+    and (r2,g2,b2) = to_rgb (color p2) in
 				  let f = fun c1 c2 -> Int.of_float (Statistics.gaussian_pick
-				   (Float.of_int (c1 + c2) /. 2.0) 0.0) in
+				   (Float.of_int (c1 + c2) /. 2.0) std_dev) in
 				  (List.map2_exn (points p1) (points p2) ~f:halfway,
 				   rgb (f r1 r2) (f g1 g2) (f b1 b2))
 
@@ -71,9 +73,9 @@ struct
     let (r1,g1,b1) = to_rgb blue in
     let (r2,g2,b2) = to_rgb red in
     let (r3,g3,b3) = to_rgb green in
-    assert(sexual_reproduction p1 p2 = ([(0,1);(2,2);(3,4);(5,5)], rgb ((r1+r2)/2) ((g1+g2)/2) ((b1+b2)/2)));
-    assert(sexual_reproduction p2 p3 = ([(3,7);(3,6);(7,3);(8,5)], rgb ((r2+r3)/2) ((g2+g3)/2) ((b2+b3)/2)));
-    assert(sexual_reproduction p1 p3 = ([(2,6);(2,5);(5,1);(6,3)], rgb ((r1+r3)/2) ((g1+g3)/2) ((b1+b3)/2)))
+    assert(sexual_reproduction 0. p1 p2 = ([(0,1);(2,2);(3,4);(5,5)], rgb ((r1+r2)/2) ((g1+g2)/2) ((b1+b2)/2)));
+    assert(sexual_reproduction 0. p2 p3 = ([(3,7);(3,6);(7,3);(8,5)], rgb ((r2+r3)/2) ((g2+g3)/2) ((b2+b3)/2)));
+    assert(sexual_reproduction 0. p1 p3 = ([(2,6);(2,5);(5,1);(6,3)], rgb ((r1+r3)/2) ((g1+g3)/2) ((b1+b3)/2)))
 
   let run_tests () =
     test_points ();
