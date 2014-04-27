@@ -1,5 +1,6 @@
 open Core.Std
 open Guess
+open Graphics
 
 (* Signature of a generic Genetic Algorithm Module *)
 module type GENETIC_ALGORITHM =
@@ -34,12 +35,20 @@ module MakeGeneticAlgorithm (G : GUESS) : GENETIC_ALGORITHM with type guess = G.
 struct
   type guess = G.guess
 
-  type ga = guess array
+  type ga = guess array * image
+  
+  let guesses (gs,_) = gs
+  
+  let target (_,img) = img
 
   (* Returns a list of N random guesses *)
   let fresh n m v =
-    let init_guess _ = G.fresh m v in
-    Array.init n ~f:init_guess
+    (* Placeholder image *)
+    let width, height = 1, 1 in
+    let target = Graphics.create_image width height in
+    
+    (* Initializes the random guesses *)
+    (Array.init n ~f:(fun _ -> G.fresh width height m v), target)
   
   let kill_phase _ = failwith "TODO"
 

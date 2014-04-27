@@ -9,8 +9,9 @@ sig
 
   type guess
 
-  (* fresh m v returns a new random guess with m Ps and v vertices *)
-  val fresh : int -> int -> guess
+  (* fresh w h m v returns a new random guess with m polygons and v vertices 
+   * where w and h are the width and height of the target image *)
+  val fresh : int -> int -> int -> int -> guess
 
   (* Returns an image of the guess *)
   val image_of_guess : guess -> image
@@ -43,10 +44,8 @@ struct
   type polygon = P.polygon
   type guess = polygon array
   
-  let rec fresh m v = failwith "TODO"
-    
-  
-  (* Makes a guess out of a list of polygons *)
+  let rec fresh width height m v = Array.init ~f:(fun _ -> P.fresh width height v) m
+
   let make lst = Array.of_list lst
 
   let image_of_guess _ = Graphics.make_image (Array.make_matrix ~dimx:5 ~dimy:12 black)

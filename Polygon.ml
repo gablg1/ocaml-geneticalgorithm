@@ -11,9 +11,9 @@ sig
   (* Returns the list of points of the polygon *)
   val points : polygon -> (float * float) list
   
-  (* 'fresh a b' returns a fresh randomly initialized polygon with points all 
-   * within the rectangle delimited by (0,0) (a, b) *)
-  val fresh : int -> int -> polygon
+  (* 'fresh a b v' returns a fresh randomly initialized polygon with v vertices
+   * and points all within the rectangle delimited by (0,0) (a, b) *)
+  val fresh : int -> int -> int -> polygon
   
   (* Makes a new polygon out of a point list and a color *)
   val make : (float * float) list -> color -> polygon
@@ -43,7 +43,7 @@ struct
   
   type polygon = (float * float) list * color
 
-  let fresh a b = failwith "TODO"
+  let fresh a b v = failwith "TODO"
 
   let make_int lst = List.map ~f:(apply_point Int.of_float) lst
   
