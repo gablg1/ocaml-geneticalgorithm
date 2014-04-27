@@ -1,0 +1,122 @@
+<html><head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Sdl" rel="Chapter" href="Sdl.html">
+<link title="Sdlcdrom" rel="Chapter" href="Sdlcdrom.html">
+<link title="Sdltimer" rel="Chapter" href="Sdltimer.html">
+<link title="Sdljoystick" rel="Chapter" href="Sdljoystick.html">
+<link title="Sdlkey" rel="Chapter" href="Sdlkey.html">
+<link title="Sdlmouse" rel="Chapter" href="Sdlmouse.html">
+<link title="Sdlevent" rel="Chapter" href="Sdlevent.html">
+<link title="Sdlvideo" rel="Chapter" href="Sdlvideo.html">
+<link title="Sdlwm" rel="Chapter" href="Sdlwm.html">
+<link title="Sdlttf" rel="Chapter" href="Sdlttf.html">
+<link title="Sdlloader" rel="Chapter" href="Sdlloader.html">
+<link title="Sdlmixer" rel="Chapter" href="Sdlmixer.html">
+<link title="Sdlgfx" rel="Chapter" href="Sdlgfx.html"><title>OCamlSDL 0.9.1 : Sdlgfx</title>
+</head>
+<body>
+<code class="code"><span class="keyword">sig</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;pixelColor&nbsp;:&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int32&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_pixelColor"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;pixelRGBA&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.color&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_pixelRGBA"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;rectangleColor&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int32&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_rectangleColor"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;rectangleRGBA&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.color&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_rectangleRGBA"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;boxColor&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int32&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_boxColor"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;boxRGBA&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.color&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_boxRGBA"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;lineColor&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int32&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_lineColor"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;lineRGBA&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.color&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_lineRGBA"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;aalineColor&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int32&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_aalineColor"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;aalineRGBA&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.color&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_aalineRGBA"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;circleColor&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int32&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_circleColor"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;circleRGBA&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.color&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_circleRGBA"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;aacircleColor&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int32&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_aacircleColor"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;aacircleRGBA&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.color&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_aacircleRGBA"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;filledCircleColor&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int32&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_filledCircleColor"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;filledCircleRGBA&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.color&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_filledCircleRGBA"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;ellipseColor&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int32&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_ellipseColor"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;ellipseRGBA&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.color&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_ellipseRGBA"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;aaellipseColor&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int32&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_aaellipseColor"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;aaellipseRGBA&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.color&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_aaellipseRGBA"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;filledEllipseColor&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int32&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_filledEllipseColor"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;filledEllipseRGBA&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.color&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_filledEllipseRGBA"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;characterColor&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;char&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int32&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_characterColor"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;characterRGBA&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;char&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.color&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_characterRGBA"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;stringColor&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;string&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int32&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_stringColor"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;stringRGBA&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.rect&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;string&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.color&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_stringRGBA"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;gfxPrimitivesSetFont&nbsp;:&nbsp;string&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_gfxPrimitivesSetFont"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;rotozoomSurface&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;float&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;float&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.surface<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_rotozoomSurface"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;rotozoomSurfaceXY&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;float&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;float&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;float&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.surface<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_rotozoomSurfaceXY"</span><br>
+&nbsp;&nbsp;<span class="keyword">external</span>&nbsp;zoomSurface&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlvideo</span>.surface&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;float&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;float&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlvideo</span>.surface<br>
+&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="string">"ml_zoomSurface"</span><br>
+<span class="keyword">end</span></code></body></html>

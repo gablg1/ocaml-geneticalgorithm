@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="next" href="Sdlcdrom.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Sdl" rel="Chapter" href="Sdl.html">
+<link title="Sdlcdrom" rel="Chapter" href="Sdlcdrom.html">
+<link title="Sdltimer" rel="Chapter" href="Sdltimer.html">
+<link title="Sdljoystick" rel="Chapter" href="Sdljoystick.html">
+<link title="Sdlkey" rel="Chapter" href="Sdlkey.html">
+<link title="Sdlmouse" rel="Chapter" href="Sdlmouse.html">
+<link title="Sdlevent" rel="Chapter" href="Sdlevent.html">
+<link title="Sdlvideo" rel="Chapter" href="Sdlvideo.html">
+<link title="Sdlwm" rel="Chapter" href="Sdlwm.html">
+<link title="Sdlttf" rel="Chapter" href="Sdlttf.html">
+<link title="Sdlloader" rel="Chapter" href="Sdlloader.html">
+<link title="Sdlmixer" rel="Chapter" href="Sdlmixer.html">
+<link title="Sdlgfx" rel="Chapter" href="Sdlgfx.html"><link title="Main functions" rel="Section" href="#3_Mainfunctions">
+<link title="Versioning information" rel="Section" href="#3_Versioninginformation">
+<link title="Environment variables" rel="Section" href="#3_Environmentvariables">
+<title>OCamlSDL 0.9.1 : Sdl</title>
+</head>
+<body>
+<div class="navbar">&nbsp;<a href="index.html">Up</a>
+&nbsp;<a href="Sdlcdrom.html">Next</a>
+</div>
+<center><h1>Module <a href="type_Sdl.html">Sdl</a></h1></center>
+<br>
+<pre><span class="keyword">module</span> Sdl: <code class="code">sig</code> <a href="Sdl.html">..</a> <code class="code">end</code></pre>This module contains functions for initializing/quitting the library<br>
+<hr width="100%">
+<pre><span id="EXCEPTIONSDL_init_exception"><span class="keyword">exception</span> SDL_init_exception</span> <span class="keyword">of</span> <code class="type">string</code></pre>
+<div class="info">
+Exception for reporting errors during initialization<br>
+</div>
+<br>
+<span id="3_Mainfunctions"><h3>Main functions</h3></span><br>
+<pre><span id="TYPEsubsystem"><span class="keyword">type</span> <code class="type"></code>subsystem</span> = <code class="type">[ `AUDIO | `CDROM | `JOYSTICK | `TIMER | `VIDEO ]</code> </pre>
+<div class="info">
+Initialization flag type<br>
+</div>
+
+<pre><span id="VALinit"><span class="keyword">val</span> init</span> : <code class="type">?auto_clean:bool -><br>       [< `AUDIO<br>        | `CDROM<br>        | `EVENTTHREAD<br>        | `EVERYTHING<br>        | `JOYSTICK<br>        | `NOPARACHUTE<br>        | `TIMER<br>        | `VIDEO ]<br>       list -> unit</code></pre><div class="info">
+Initialize the SDL library. This should be called before all other 
+   SDL functions. 
+   The flags parameter specifies what part(s) of SDL to initialize.<ul>
+<li>`NOPARACHUTE : Don't catch fatal signals</li>
+<li>`EVENTTHREAD : Automatically pump events in a separate threads</li>
+<li>`EVERYTHING  : initialize all subsystems</li>
+</ul>
+<br>
+</div>
+<pre><span id="VALinit_subsystem"><span class="keyword">val</span> init_subsystem</span> : <code class="type"><a href="Sdl.html#TYPEsubsystem">subsystem</a> list -> unit</code></pre><pre><span id="VALwas_init"><span class="keyword">val</span> was_init</span> : <code class="type">unit -> <a href="Sdl.html#TYPEsubsystem">subsystem</a> list</code></pre><pre><span id="VALquit"><span class="keyword">val</span> quit</span> : <code class="type">unit -> unit</code></pre><div class="info">
+<code class="code">quit</code> shuts down all SDL subsystems and frees the resources allocated 
+  to them. This should always be called before you exit.<br>
+</div>
+<pre><span id="VALquit_subsystem"><span class="keyword">val</span> quit_subsystem</span> : <code class="type"><a href="Sdl.html#TYPEsubsystem">subsystem</a> list -> unit</code></pre><br>
+<span id="3_Versioninginformation"><h3>Versioning information</h3></span><br>
+<br><code><span id="TYPEversion"><span class="keyword">type</span> <code class="type"></code>version</span> = {</code><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>major&nbsp;: <code class="type">int</code>;</code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>minor&nbsp;: <code class="type">int</code>;</code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>patch&nbsp;: <code class="type">int</code>;</code></td>
+
+</tr></table>
+}
+
+
+<pre><span id="VALversion"><span class="keyword">val</span> version</span> : <code class="type">unit -> <a href="Sdl.html#TYPEversion">version</a></code></pre><div class="info">
+version of the SDL library<br>
+</div>
+<pre><span id="VALstring_of_version"><span class="keyword">val</span> string_of_version</span> : <code class="type"><a href="Sdl.html#TYPEversion">version</a> -> string</code></pre><br>
+<span id="3_Environmentvariables"><h3>Environment variables</h3></span><br>
+<pre><span id="VALgetenv"><span class="keyword">val</span> getenv</span> : <code class="type">string -> string</code></pre><pre><span id="VALputenv"><span class="keyword">val</span> putenv</span> : <code class="type">string -> string -> unit</code></pre></body></html>
