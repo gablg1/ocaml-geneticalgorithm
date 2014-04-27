@@ -18,6 +18,12 @@ sig
   
   (* Prints a point *)
   val print_point : (float * float) -> unit
+  
+  (* Generates a random point within (a,b) *)
+  val random_point : float -> float -> (float * float)
+  
+  (* Generates a random color *)
+  val random_color : unit -> color
 end
 
 (* Implements Helpers *)
@@ -41,6 +47,10 @@ struct
     
   let print_point (x,y) =
     Printf.printf "(%f, %f)\n" x y
+    
+  let random_point a b = ((Random.float a), Random.float b)
+  
+  let random_color () = Random.int 0xffffff
 end
 
 

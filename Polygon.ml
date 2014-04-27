@@ -9,7 +9,7 @@ sig
   type polygon
 
   (* Returns the list of points of the polygon *)
-  val points : polygon -> (float * float) list
+  val points : polygon -> (float * float) array
   
   (* 'fresh a b v' returns a fresh randomly initialized polygon with v vertices
    * and points all within the rectangle delimited by (0,0) (a, b) *)
@@ -38,18 +38,20 @@ sig
   val run_tests : unit -> unit
 end
 
-module Polygon : POLYGON with type polygon=(float * float) list * color =
+module Polygon : POLYGON with type polygon=(float * float) array * color =
 struct
   
-  type polygon = (float * float) list * color
+  type polygon = (float * float) array * color
 
-  let fresh a b v = failwith "TODO"
+  let fresh a b v = 
+    let points = Array.init v ~f:(fun _ -> random_point (Float.of_int a) (Float.of_int b)) in
+    (points, random_color ())
 
-  let make_int lst = List.map ~f:(apply_point Int.of_float) lst
+  let make_int lst = Array.map ~f:(apply_point Int.of_float) lst
   
-  let make_float lst = List.map ~f:(apply_point Float.of_int) lst
+  let make_float lst = Array.map ~f:(apply_point Float.of_int) lst
 
-  let make (lst : (float * float) list) (c : color) = (lst, c)
+  let make (lst : (float * float) list) (c : color) = (Array.of_list lst, c)
   
   let points (ps,_) = ps
 
@@ -68,16 +70,16 @@ struct
     Graphics.rgb (f r1 r2) (f g1 g2) (f b1 b2)
     
   let sexual_reproduction std_dev p1 p2 = 
-    let points = List.map2_exn (points p1) (points p2) ~f:(point_reproduction std_dev) in
+    let points = Array.map2_exn (points p1) (points p2) ~f:(point_reproduction std_dev) in
     (points, color_reproduction std_dev (color p1) (color p2))
 
   let test_points () =
     let p1 = make [] blue in
     let p2 = make [(0.,0.)] red in
     let p3 = make [(5.,12.);(4.,9.);(9.,1.);(9.,3.)] green in
-    assert(points p1 = []);
-    assert(points p2 = [(0.,0.)]);
-    assert(points p3 = [(5.,12.);(4.,9.);(9.,1.);(9.,3.)])
+    assert(points p1 = Array.of_list []);
+    assert(points p2 = Array.of_list [(0.,0.)]);
+    assert(points p3 = Array.of_list [(5.,12.);(4.,9.);(9.,1.);(9.,3.)])
 
   let test_color () =
     let p1 = make [] blue in
@@ -96,7 +98,7 @@ struct
   (* Prints a polygon for testing purposes *)
   let print p =
     print_endline "######### Start of Polygon #########";
-    List.iter ~f:(fun p -> print_point p) (points p);
+    Array.iter ~f:(fun p -> print_point p) (points p);
     Printf.printf "Color: %x\n" (color p);
     print_endline "######### End of Polygon #########"
 

@@ -13,6 +13,9 @@ sig
    * where w and h are the width and height of the target image *)
   val fresh : int -> int -> int -> int -> guess
 
+  (* Returns list of polygons that composes guess *)
+  val polygons : guess -> polygon list
+
   (* Returns an image of the guess *)
   val image_of_guess : guess -> image
   
@@ -44,7 +47,9 @@ struct
   type polygon = P.polygon
   type guess = polygon array
   
-  let rec fresh width height m v = Array.init ~f:(fun _ -> P.fresh width height v) m
+  let fresh width height m v = Array.init ~f:(fun _ -> P.fresh width height v) m
+  
+  let polygons g = Array.to_list g
 
   let make lst = Array.of_list lst
 
