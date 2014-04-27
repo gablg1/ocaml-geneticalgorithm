@@ -12,7 +12,7 @@ sig
   val normal : unit -> t 
 
   (* Returns a pseudorandom t in the gaussian distribution *)
-  val gaussian_pick : t -> std_dev -> t
+  val gaussian_pick : std_dev -> t -> t
 end
 
 (* Implements Statistics of Floats *)
@@ -31,7 +31,7 @@ struct
     if (s >= 1.0 || s = 0.0) then normal ()
     else u *. sqrt (-2.0 *. (log s) /. s)
 
-  let gaussian_pick m s = 
+  let gaussian_pick s m = 
     let n = normal () in
     n *. s +. m
     
