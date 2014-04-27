@@ -24,7 +24,6 @@ sig
   (* Returns the color of the polygon *)
   val color : polygon -> color
   
-  
   (* 'sexual_reproduction p1 p2 c' returns a polygon
    * daughter of p1 and p2 with crossing over level of c *)
   val sexual_reproduction : float -> polygon -> polygon -> polygon

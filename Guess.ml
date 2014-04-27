@@ -39,7 +39,7 @@ struct
 
   let image_of_guess _ = Graphics.make_image (Array.make_matrix ~dimx:5 ~dimy:12 black)
 
-  let cost _ _ = 0.0
+  let cost _ _ = failwith "TODO"
 
   let sexual_reproduction std_dev g1 g2 = List.map2_exn g1 g2 ~f:(Polygon.sexual_reproduction std_dev)
   
@@ -54,23 +54,18 @@ struct
     let g5 = make_guess [p2; p3] in
     let g6 = make_guess [p3; p1] in
     
-    let daughter = sexual_reproduction 0. g1 g2 in
-    let tuple = match daughter with
-    | [a] -> a
-    | _ -> failwith "bug1" in
-    print_endline (string_of_int (snd tuple));
-    print_endline (string_of_int ((blue+red)/2))
-    (*
-    assert(sexual_reproduction 0. g1 g2 = [([(0,1);(2,2);(3,4);(5,5)], halfway_color blue red)]);
-    assert(sexual_reproduction 0. g2 g3 = [([(3,7);(3,6);(7,3);(8,5)], halfway_color green red)]);
-    assert(sexual_reproduction 0. g1 g3 = [([(2,6);(2,5);(5,1);(6,3)], halfway_color blue green)]);
-    assert(sexual_reproduction 0. g4 g5 = 
-      [([(0,1);(2,2);(3,4);(5,5)], halfway_color blue red); ([(3,7);(3,6);(7,3);(8,5)], halfway_color red green)]);
-    assert(sexual_reproduction 0. g5 g6 = 
-      [([(3,7);(3,6);(7,3);(8,5)], halfway_color green red); ([(2,6);(2,5);(5,1);(6,3)], halfway_color blue green)]);
-    assert(sexual_reproduction 0. g4 g6 = 
-      [([(2,6);(2,5);(5,1);(6,3)], halfway_color blue green); ([(0,1);(2,2);(3,4);(5,5)], halfway_color blue red)])
-      *)
+    (* Answers *)
+    let r1 = ([(0.5,1.);(2.,2.5);(3.5,4.);(5.,5.5)], halfway_color blue red) in
+    let r2 = ([(3.,7.);(3.5,6.5);(7.,3.5);(8.,5.5)], halfway_color green red) in
+    let r3 = ([(2.5,6.);(2.5,5.);(5.5,1.5);(6.,3.)], halfway_color blue green) in
+    
+    assert(sexual_reproduction 0. g1 g2 = [r1]);
+    assert(sexual_reproduction 0. g2 g3 = [r2]);
+    assert(sexual_reproduction 0. g1 g3 = [r3]);
+    assert(sexual_reproduction 0. g4 g5 = [r1; r2]);
+    assert(sexual_reproduction 0. g4 g6 = [r3; r1]);
+    assert(sexual_reproduction 0. g5 g6 = [r2; r3])
+      
 
   let run_tests () =
     test_sexual_reproduction ();
