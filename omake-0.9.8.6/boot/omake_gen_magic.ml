@@ -1,1 +1,0 @@
-../src/magic/omake_gen_magic.ml
