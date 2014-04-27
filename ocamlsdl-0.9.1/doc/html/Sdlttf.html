@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="previous" href="Sdlwm.html">
+<link rel="next" href="Sdlloader.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Sdl" rel="Chapter" href="Sdl.html">
+<link title="Sdlcdrom" rel="Chapter" href="Sdlcdrom.html">
+<link title="Sdltimer" rel="Chapter" href="Sdltimer.html">
+<link title="Sdljoystick" rel="Chapter" href="Sdljoystick.html">
+<link title="Sdlkey" rel="Chapter" href="Sdlkey.html">
+<link title="Sdlmouse" rel="Chapter" href="Sdlmouse.html">
+<link title="Sdlevent" rel="Chapter" href="Sdlevent.html">
+<link title="Sdlvideo" rel="Chapter" href="Sdlvideo.html">
+<link title="Sdlwm" rel="Chapter" href="Sdlwm.html">
+<link title="Sdlttf" rel="Chapter" href="Sdlttf.html">
+<link title="Sdlloader" rel="Chapter" href="Sdlloader.html">
+<link title="Sdlmixer" rel="Chapter" href="Sdlmixer.html">
+<link title="Sdlgfx" rel="Chapter" href="Sdlgfx.html"><link title="General operations on font datatype" rel="Section" href="#3_Generaloperationsonfontdatatype">
+<link title="Font information " rel="Section" href="#3_Fontinformation">
+<link title="Text rendering functions" rel="Section" href="#3_Textrenderingfunctions">
+<link title="Text rendering functions" rel="Subsection" href="#4_Textrenderingfunctions">
+<link title="Glyph rendering functions" rel="Subsection" href="#4_Glyphrenderingfunctions">
+<title>OCamlSDL 0.9.1 : Sdlttf</title>
+</head>
+<body>
+<div class="navbar"><a href="Sdlwm.html">Previous</a>
+&nbsp;<a href="index.html">Up</a>
+&nbsp;<a href="Sdlloader.html">Next</a>
+</div>
+<center><h1>Module <a href="type_Sdlttf.html">Sdlttf</a></h1></center>
+<br>
+<pre><span class="keyword">module</span> Sdlttf: <code class="code">sig</code> <a href="Sdlttf.html">..</a> <code class="code">end</code></pre>This module provides TTF (TrueType Font) support<br>
+<hr width="100%">
+<pre><span id="EXCEPTIONSDLttf_exception"><span class="keyword">exception</span> SDLttf_exception</span> <span class="keyword">of</span> <code class="type">string</code></pre>
+<div class="info">
+Exception for reporting errors<br>
+</div>
+<pre><span id="VALinit"><span class="keyword">val</span> init</span> : <code class="type">unit -> unit</code></pre><div class="info">
+Initialise SDL_tff and freetype<br>
+</div>
+<pre><span id="VALquit"><span class="keyword">val</span> quit</span> : <code class="type">unit -> unit</code></pre><div class="info">
+Quits the system<br>
+</div>
+<br>
+<span id="3_Generaloperationsonfontdatatype"><h3>General operations on font datatype</h3></span><br>
+<pre><span id="TYPEfont"><span class="keyword">type</span> <code class="type"></code>font</span> </pre>
+<div class="info">
+abstract font datatype<br>
+</div>
+
+<pre><span id="VALopen_font"><span class="keyword">val</span> open_font</span> : <code class="type">string -> ?index:int -> int -> <a href="Sdlttf.html#TYPEfont">font</a></code></pre><div class="info">
+open a font file and create a font of the specified point size<br>
+<b>Returns</b> font datatype<br>
+</div>
+<br>
+Set and retrieve the font style
+   This font style is implemented by modifying the font glyphs, and
+   doesn't reflect any inherent properties of the truetype font file.<br>
+<br><code><span id="TYPEfont_style"><span class="keyword">type</span> <code class="type"></code>font_style</span> = </code><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">NORMAL</span></code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">BOLD</span></code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">ITALIC</span></code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">UNDERLINE</span></code></td>
+
+</tr></table>
+
+
+<pre><span id="VALget_font_style"><span class="keyword">val</span> get_font_style</span> : <code class="type"><a href="Sdlttf.html#TYPEfont">font</a> -> <a href="Sdlttf.html#TYPEfont_style">font_style</a> list</code></pre><div class="info">
+Retrieve the font style : either <code class="code">NORMAL</code> or a combination of 
+   <code class="code">BOLD</code>, <code class="code">ITALIC</code> and <code class="code">UNDERLINE</code><br>
+</div>
+<pre><span id="VALset_font_style"><span class="keyword">val</span> set_font_style</span> : <code class="type"><a href="Sdlttf.html#TYPEfont">font</a> -> <a href="Sdlttf.html#TYPEfont_style">font_style</a> list -> unit</code></pre><br>
+<span id="3_Fontinformation"><h3>Font information </h3></span><br>
+<pre><span id="VALfont_height"><span class="keyword">val</span> font_height</span> : <code class="type"><a href="Sdlttf.html#TYPEfont">font</a> -> int</code></pre><div class="info">
+<b>Returns</b> the total height(int) of the font (usually equal to point size)<br>
+</div>
+<pre><span id="VALfont_ascent"><span class="keyword">val</span> font_ascent</span> : <code class="type"><a href="Sdlttf.html#TYPEfont">font</a> -> int</code></pre><div class="info">
+<b>Returns</b> the offset(int) from the baseline to the top of the font
+   this is a positive value, relative to the baseline<br>
+</div>
+<pre><span id="VALfont_descent"><span class="keyword">val</span> font_descent</span> : <code class="type"><a href="Sdlttf.html#TYPEfont">font</a> -> int</code></pre><div class="info">
+<b>Returns</b> the offset from the baseline to the bottom of the font
+   this is a negative value, relative to the baseline<br>
+</div>
+<pre><span id="VALfont_lineskip"><span class="keyword">val</span> font_lineskip</span> : <code class="type"><a href="Sdlttf.html#TYPEfont">font</a> -> int</code></pre><div class="info">
+Get the recommended spacing between lines of text for this font<br>
+</div>
+<pre><span id="VALfont_faces"><span class="keyword">val</span> font_faces</span> : <code class="type"><a href="Sdlttf.html#TYPEfont">font</a> -> int</code></pre><div class="info">
+Get the number of faces of the font<br>
+</div>
+<br>
+Get some font face attributes, if any<br>
+<pre><span id="VALis_fixed_width"><span class="keyword">val</span> is_fixed_width</span> : <code class="type"><a href="Sdlttf.html#TYPEfont">font</a> -> bool</code></pre><pre><span id="VALfamily_name"><span class="keyword">val</span> family_name</span> : <code class="type"><a href="Sdlttf.html#TYPEfont">font</a> -> string</code></pre><pre><span id="VALstyle_name"><span class="keyword">val</span> style_name</span> : <code class="type"><a href="Sdlttf.html#TYPEfont">font</a> -> string</code></pre><br>
+<span id="3_Textrenderingfunctions"><h3>Text rendering functions</h3></span><br>
+<pre><span id="VALsize_text"><span class="keyword">val</span> size_text</span> : <code class="type"><a href="Sdlttf.html#TYPEfont">font</a> -> string -> int * int</code></pre><div class="info">
+Get the dimensions of a rendered string of text<br>
+</div>
+<pre><span id="VALsize_utf8"><span class="keyword">val</span> size_utf8</span> : <code class="type"><a href="Sdlttf.html#TYPEfont">font</a> -> string -> int * int</code></pre><pre><span id="VALglyph_metrics"><span class="keyword">val</span> glyph_metrics</span> : <code class="type"><a href="Sdlttf.html#TYPEfont">font</a> -> char -> int * int * int * int</code></pre><div class="info">
+<b>Returns</b> the metrics (minx,maxx,miny,maxy) of a glyph<br>
+</div>
+<br><code><span id="TYPErender_kind"><span class="keyword">type</span> <code class="type"></code>render_kind</span> = </code><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">SOLID</span> <span class="keyword">of</span> <code class="type"><a href="Sdlvideo.html#TYPEcolor">Sdlvideo.color</a></code></code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">SHADED</span> <span class="keyword">of</span> <code class="type"><a href="Sdlvideo.html#TYPEcolor">Sdlvideo.color</a> * <a href="Sdlvideo.html#TYPEcolor">Sdlvideo.color</a></code></code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">BLENDED</span> <span class="keyword">of</span> <code class="type"><a href="Sdlvideo.html#TYPEcolor">Sdlvideo.color</a></code></code></td>
+
+</tr></table>
+
+<div class="info">
+Variant type for the generic rendering functions<br>
+</div>
+
+<br>
+<span id="4_Textrenderingfunctions"><h4>Text rendering functions</h4></span><br>
+<pre><span id="VALrender_text_solid"><span class="keyword">val</span> render_text_solid</span> : <code class="type"><a href="Sdlttf.html#TYPEfont">font</a> -> string -> fg:<a href="Sdlvideo.html#TYPEcolor">Sdlvideo.color</a> -> <a href="Sdlvideo.html#TYPEsurface">Sdlvideo.surface</a></code></pre><pre><span id="VALrender_text_shaded"><span class="keyword">val</span> render_text_shaded</span> : <code class="type"><a href="Sdlttf.html#TYPEfont">font</a> -><br>       string -> fg:<a href="Sdlvideo.html#TYPEcolor">Sdlvideo.color</a> -> bg:<a href="Sdlvideo.html#TYPEcolor">Sdlvideo.color</a> -> <a href="Sdlvideo.html#TYPEsurface">Sdlvideo.surface</a></code></pre><pre><span id="VALrender_text_blended"><span class="keyword">val</span> render_text_blended</span> : <code class="type"><a href="Sdlttf.html#TYPEfont">font</a> -> string -> fg:<a href="Sdlvideo.html#TYPEcolor">Sdlvideo.color</a> -> <a href="Sdlvideo.html#TYPEsurface">Sdlvideo.surface</a></code></pre><pre><span id="VALrender_utf8_solid"><span class="keyword">val</span> render_utf8_solid</span> : <code class="type"><a href="Sdlttf.html#TYPEfont">font</a> -> string -> fg:<a href="Sdlvideo.html#TYPEcolor">Sdlvideo.color</a> -> <a href="Sdlvideo.html#TYPEsurface">Sdlvideo.surface</a></code></pre><pre><span id="VALrender_utf8_shaded"><span class="keyword">val</span> render_utf8_shaded</span> : <code class="type"><a href="Sdlttf.html#TYPEfont">font</a> -><br>       string -> fg:<a href="Sdlvideo.html#TYPEcolor">Sdlvideo.color</a> -> bg:<a href="Sdlvideo.html#TYPEcolor">Sdlvideo.color</a> -> <a href="Sdlvideo.html#TYPEsurface">Sdlvideo.surface</a></code></pre><pre><span id="VALrender_utf8_blended"><span class="keyword">val</span> render_utf8_blended</span> : <code class="type"><a href="Sdlttf.html#TYPEfont">font</a> -> string -> fg:<a href="Sdlvideo.html#TYPEcolor">Sdlvideo.color</a> -> <a href="Sdlvideo.html#TYPEsurface">Sdlvideo.surface</a></code></pre><pre><span id="VALrender_text"><span class="keyword">val</span> render_text</span> : <code class="type"><a href="Sdlttf.html#TYPEfont">font</a> -> <a href="Sdlttf.html#TYPErender_kind">render_kind</a> -> string -> <a href="Sdlvideo.html#TYPEsurface">Sdlvideo.surface</a></code></pre><br>
+<span id="4_Glyphrenderingfunctions"><h4>Glyph rendering functions</h4></span><br>
+<pre><span id="VALrender_glyph_solid"><span class="keyword">val</span> render_glyph_solid</span> : <code class="type"><a href="Sdlttf.html#TYPEfont">font</a> -> char -> fg:<a href="Sdlvideo.html#TYPEcolor">Sdlvideo.color</a> -> <a href="Sdlvideo.html#TYPEsurface">Sdlvideo.surface</a></code></pre><pre><span id="VALrender_glyph_shaded"><span class="keyword">val</span> render_glyph_shaded</span> : <code class="type"><a href="Sdlttf.html#TYPEfont">font</a> -><br>       char -> fg:<a href="Sdlvideo.html#TYPEcolor">Sdlvideo.color</a> -> bg:<a href="Sdlvideo.html#TYPEcolor">Sdlvideo.color</a> -> <a href="Sdlvideo.html#TYPEsurface">Sdlvideo.surface</a></code></pre><pre><span id="VALrender_glyph_blended"><span class="keyword">val</span> render_glyph_blended</span> : <code class="type"><a href="Sdlttf.html#TYPEfont">font</a> -> char -> fg:<a href="Sdlvideo.html#TYPEcolor">Sdlvideo.color</a> -> <a href="Sdlvideo.html#TYPEsurface">Sdlvideo.surface</a></code></pre><pre><span id="VALrender_glyph"><span class="keyword">val</span> render_glyph</span> : <code class="type"><a href="Sdlttf.html#TYPEfont">font</a> -> <a href="Sdlttf.html#TYPErender_kind">render_kind</a> -> char -> <a href="Sdlvideo.html#TYPEsurface">Sdlvideo.surface</a></code></pre></body></html>

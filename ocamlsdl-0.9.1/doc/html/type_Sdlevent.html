@@ -1,0 +1,156 @@
+<html><head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Sdl" rel="Chapter" href="Sdl.html">
+<link title="Sdlcdrom" rel="Chapter" href="Sdlcdrom.html">
+<link title="Sdltimer" rel="Chapter" href="Sdltimer.html">
+<link title="Sdljoystick" rel="Chapter" href="Sdljoystick.html">
+<link title="Sdlkey" rel="Chapter" href="Sdlkey.html">
+<link title="Sdlmouse" rel="Chapter" href="Sdlmouse.html">
+<link title="Sdlevent" rel="Chapter" href="Sdlevent.html">
+<link title="Sdlvideo" rel="Chapter" href="Sdlvideo.html">
+<link title="Sdlwm" rel="Chapter" href="Sdlwm.html">
+<link title="Sdlttf" rel="Chapter" href="Sdlttf.html">
+<link title="Sdlloader" rel="Chapter" href="Sdlloader.html">
+<link title="Sdlmixer" rel="Chapter" href="Sdlmixer.html">
+<link title="Sdlgfx" rel="Chapter" href="Sdlgfx.html"><title>OCamlSDL 0.9.1 : Sdlevent</title>
+</head>
+<body>
+<code class="code"><span class="keyword">sig</span><br>
+&nbsp;&nbsp;<span class="keyword">exception</span>&nbsp;<span class="constructor">Event_exn</span>&nbsp;<span class="keyword">of</span>&nbsp;string<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;active_state&nbsp;=&nbsp;<span class="constructor">MOUSEFOCUS</span>&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">INPUTFOCUS</span>&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">APPACTIVE</span><br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;get_app_state&nbsp;:&nbsp;unit&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlevent</span>.active_state&nbsp;list<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;active_event&nbsp;=&nbsp;{&nbsp;gain&nbsp;:&nbsp;bool;&nbsp;ae_state&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.active_state&nbsp;list;&nbsp;}<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;switch_state&nbsp;=&nbsp;<span class="constructor">RELEASED</span>&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">PRESSED</span><br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;keyboard_event&nbsp;=&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ke_which&nbsp;:&nbsp;int;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ke_state&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.switch_state;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;keysym&nbsp;:&nbsp;<span class="constructor">Sdlkey</span>.t;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;keymod&nbsp;:&nbsp;<span class="constructor">Sdlkey</span>.mod_state;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;keycode&nbsp;:&nbsp;char;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;unicode&nbsp;:&nbsp;int;<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;mousemotion_event&nbsp;=&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;mme_which&nbsp;:&nbsp;int;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;mme_state&nbsp;:&nbsp;<span class="constructor">Sdlmouse</span>.button&nbsp;list;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;mme_x&nbsp;:&nbsp;int;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;mme_y&nbsp;:&nbsp;int;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;mme_xrel&nbsp;:&nbsp;int;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;mme_yrel&nbsp;:&nbsp;int;<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;mousebutton_event&nbsp;=&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;mbe_which&nbsp;:&nbsp;int;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;mbe_button&nbsp;:&nbsp;<span class="constructor">Sdlmouse</span>.button;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;mbe_state&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.switch_state;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;mbe_x&nbsp;:&nbsp;int;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;mbe_y&nbsp;:&nbsp;int;<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;joyaxis_event&nbsp;=&nbsp;{&nbsp;jae_which&nbsp;:&nbsp;int;&nbsp;jae_axis&nbsp;:&nbsp;int;&nbsp;jae_value&nbsp;:&nbsp;int;&nbsp;}<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;joyball_event&nbsp;=&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;jle_which&nbsp;:&nbsp;int;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;jle_ball&nbsp;:&nbsp;int;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;jle_xrel&nbsp;:&nbsp;int;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;jle_yrel&nbsp;:&nbsp;int;<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;joyhat_event&nbsp;=&nbsp;{&nbsp;jhe_which&nbsp;:&nbsp;int;&nbsp;jhe_hat&nbsp;:&nbsp;int;&nbsp;jhe_value&nbsp;:&nbsp;int;&nbsp;}<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;joybutton_event&nbsp;=&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;jbe_which&nbsp;:&nbsp;int;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;jbe_button&nbsp;:&nbsp;int;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;jbe_state&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.switch_state;<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;event&nbsp;=<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">ACTIVE</span>&nbsp;<span class="keyword">of</span>&nbsp;<span class="constructor">Sdlevent</span>.active_event<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">KEYDOWN</span>&nbsp;<span class="keyword">of</span>&nbsp;<span class="constructor">Sdlevent</span>.keyboard_event<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">KEYUP</span>&nbsp;<span class="keyword">of</span>&nbsp;<span class="constructor">Sdlevent</span>.keyboard_event<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">MOUSEMOTION</span>&nbsp;<span class="keyword">of</span>&nbsp;<span class="constructor">Sdlevent</span>.mousemotion_event<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">MOUSEBUTTONDOWN</span>&nbsp;<span class="keyword">of</span>&nbsp;<span class="constructor">Sdlevent</span>.mousebutton_event<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">MOUSEBUTTONUP</span>&nbsp;<span class="keyword">of</span>&nbsp;<span class="constructor">Sdlevent</span>.mousebutton_event<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">JOYAXISMOTION</span>&nbsp;<span class="keyword">of</span>&nbsp;<span class="constructor">Sdlevent</span>.joyaxis_event<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">JOYBALLMOTION</span>&nbsp;<span class="keyword">of</span>&nbsp;<span class="constructor">Sdlevent</span>.joyball_event<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">JOYHATMOTION</span>&nbsp;<span class="keyword">of</span>&nbsp;<span class="constructor">Sdlevent</span>.joyhat_event<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">JOYBUTTONDOWN</span>&nbsp;<span class="keyword">of</span>&nbsp;<span class="constructor">Sdlevent</span>.joybutton_event<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">JOYBUTTONUP</span>&nbsp;<span class="keyword">of</span>&nbsp;<span class="constructor">Sdlevent</span>.joybutton_event<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">QUIT</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">SYSWM</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">VIDEORESIZE</span>&nbsp;<span class="keyword">of</span>&nbsp;int&nbsp;*&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">VIDEOEXPOSE</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">USER</span>&nbsp;<span class="keyword">of</span>&nbsp;int<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;string_of_event&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;string<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;event_mask&nbsp;=&nbsp;int<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;active_mask&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event_mask<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;keydown_mask&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event_mask<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;keyup_mask&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event_mask<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;mousemotion_mask&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event_mask<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;mousebuttondown_mask&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event_mask<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;mousebuttonup_mask&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event_mask<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;joyaxismotion_mask&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event_mask<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;joyballmotion_mask&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event_mask<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;joyhatmotion_mask&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event_mask<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;joybuttondown_mask&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event_mask<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;joybuttonup_mask&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event_mask<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;quit_mask&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event_mask<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;syswmevent_mask&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event_mask<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;videoresize_mask&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event_mask<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;videoexpose_mask&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event_mask<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;userevent_mask&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event_mask<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;keyboard_event_mask&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event_mask<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;mouse_event_mask&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event_mask<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;joystick_event_mask&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event_mask<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;all_events_mask&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event_mask<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;event_kind&nbsp;=<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">ACTIVE_EVENT</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">KEYDOWN_EVENT</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">KEYUP_EVENT</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">MOUSEMOTION_EVENT</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">MOUSEBUTTONDOWN_EVENT</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">MOUSEBUTTONUP_EVENT</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">JOYAXISMOTION_EVENT</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">JOYBALL_EVENT</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">JOYHAT_EVENT</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">JOYBUTTONDOWN_EVENT</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">JOYBUTTONUP_EVENT</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">QUIT_EVENT</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">SYSWM_EVENT</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">RESIZE_EVENT</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">EXPOSE_EVENT</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">USER_EVENT</span><br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;make_mask&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event_kind&nbsp;list&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlevent</span>.event_mask<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;of_mask&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event_mask&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlevent</span>.event_kind&nbsp;list<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;enable_events&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event_mask&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;disable_events&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event_mask&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;get_enabled_events&nbsp;:&nbsp;unit&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlevent</span>.event_mask<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;get_state&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event_kind&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;set_state&nbsp;:&nbsp;bool&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlevent</span>.event_kind&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;pump&nbsp;:&nbsp;unit&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;wait_event&nbsp;:&nbsp;unit&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlevent</span>.event<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;wait&nbsp;:&nbsp;unit&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;poll&nbsp;:&nbsp;unit&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlevent</span>.event&nbsp;option<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;has_event&nbsp;:&nbsp;unit&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;peek&nbsp;:&nbsp;?mask:<span class="constructor">Sdlevent</span>.event_mask&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlevent</span>.event&nbsp;list<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;get&nbsp;:&nbsp;?mask:<span class="constructor">Sdlevent</span>.event_mask&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlevent</span>.event&nbsp;list<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;add&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.event&nbsp;list&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;<span class="keyword">module</span>&nbsp;<span class="constructor">Old</span>&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">sig</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;keyboard_event_func&nbsp;=<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlkey</span>.t&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlevent</span>.switch_state&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;mouse_event_func&nbsp;=<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlmouse</span>.button&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Sdlevent</span>.switch_state&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;mousemotion_event_func&nbsp;=&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;idle_event_func&nbsp;=&nbsp;unit&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;resize_event_func&nbsp;=&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;set_keyboard_event_func&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.<span class="constructor">Old</span>.keyboard_event_func&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;set_mouse_event_func&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.<span class="constructor">Old</span>.mouse_event_func&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;set_mousemotion_event_func&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sdlevent</span>.<span class="constructor">Old</span>.mousemotion_event_func&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;set_idle_event_func&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.<span class="constructor">Old</span>.idle_event_func&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;set_resize_event_func&nbsp;:&nbsp;<span class="constructor">Sdlevent</span>.<span class="constructor">Old</span>.resize_event_func&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;start_event_loop&nbsp;:&nbsp;unit&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;exit_event_loop&nbsp;:&nbsp;unit&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">end</span><br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;link_me&nbsp;:&nbsp;unit<br>
+<span class="keyword">end</span></code></body></html>

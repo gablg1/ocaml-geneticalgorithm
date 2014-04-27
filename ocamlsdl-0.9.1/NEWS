@@ -1,0 +1,79 @@
+Release 0.9.1:
+        * fix the button index in Sdlevent.mousebutton_event 
+        * bugfixes (Sdlmixer.group_channels, Sdlmixer.volume_music, 
+           Sdlmixer.setvolume_music)
+
+Release 0.9.0:
+        * add a variant in Sdlmouse.button for extra mouse buttons
+          (seen with mouse events in Sdlevent)
+        * ensure that the arrays returned by Sdlvideo.pixel_data keep
+          the underlying SDL_surface alive
+        * put SDL_GL_SwapBuffers in a blocking section
+        * bind the Mix_QuickLoad_RAW function (Sdlmixer.load_string_raw)
+        * fix a typo in META for Sdlgfx 
+
+Release 0.8.0:
+        * add SDL_gfx bindings (Julien Boulnois)
+        * add UTF8 support in Sdlttf
+        * put the IMG_Load function in a blocking section
+        * rename some C functions to avoid conflicts (with Camlimages)
+        * some compilation/installation fixes for MacOSX
+        * autoconf update and cleanup
+
+Release 0.7.2:
+	* support for MacOSX (thanks to Daniel Bünzli and Francesco
+          Zappa Nardelli for testing) 
+
+Release 0.7.1:
+	* add missing doc/ directory in the tarball
+	* add a small AWK script, xpm_to_ml for embedding XPM files in 
+	  sources
+
+Release 0.7.0:
+	* findlib support
+	* bugfixes
+	* build system improvments, hopefully builds on Windows
+
+Release 0.6.3:
+	* bug fix for SDLRWops
+	* sync with SDL 1.2.5
+
+Release 0.6.2:
+	* interfaced SDLRWops for reading images and sounds from
+	  memory buffers.
+	* added SDL.putenv and SDL.getenv
+	* some internal C-side changes
+
+Release 0.6.1:
+	* GL-related functions in a new module Sdlgl
+          better LablGL interaction
+        * compiles with the Mingw port of ocaml (see doc/ocamlsdl-mingw.txt)
+        * fixed typos in type and constructor names
+        * fixed Sdlttf.set_font_style and Sdlttf.get_font_style
+        * fixed Sdlvideo.save_BMP
+
+Release 0.6:
+	* Rewrote Sdlvideo and Sdlevent modules. Added several other modules.
+
+Release 0.5:
+	* Ocamlplayer has been added, it plays audio file (ogg,xm, s3m, wav) 
+	  on the commande line.
+	* Applying many patches.
+
+Release 0.5-pre3:
+	* Adding documentation directory
+	* new function char_of_key in Sdlevent module
+
+Release 0.5-pre2:
+	* Adding install and uninstall target stuff
+
+Release 0.5-pre1: (no released at sourceforge)
+	* bigarray support in sdlvideo module
+	* SDL-1.2, SDL_image-1.2.0, SDL_mixer-1.2.0, SDL_ttf-1.2.2 support
+	  but not fully  implemented.
+	* major changes in the internal structure of directories
+	* some bugfixes 
+	* works with ocaml-3.01
+
+Release 0.4:
+	* The initial was arbitrary numbered 0.4.

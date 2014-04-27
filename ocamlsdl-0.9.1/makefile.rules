@@ -1,0 +1,20 @@
+# -*- makefile -*-
+
+%.cmi : %.mli
+	$(OCAMLC) $(MLINC) $<
+
+%.cmo : %.ml
+	$(OCAMLC) -c $(MLINC) $(MLFLAGS) $<
+
+%.cmx : %.ml
+	$(OCAMLOPT) -c $(MLINC) $(OMLFLAGS) $<
+
+%.$(OBJEXT) : %.c
+	$(OCAMLC) -ccopt "$(CPPFLAGS) $(CFLAGS)" $<
+
+STUB_SRCS = $(patsubst %,%_stub.c,$($(1)_MODULES)) $($(1)_C_SRC)
+STUB_OBJS = $(patsubst %.c,%.$(OBJEXT),$(call STUB_SRCS,$(1)))
+
+ML_SRCS     = $(patsubst %,%.ml,$($(1)_MODULES))
+ML_OBJS     = $(patsubst %.ml,%.cmo,$(call ML_SRCS,$(1)))
+ML_OPT_OBJS = $(patsubst %.ml,%.cmx,$(call ML_SRCS,$(1)))

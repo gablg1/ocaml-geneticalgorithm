@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="previous" href="Sdltimer.html">
+<link rel="next" href="Sdlkey.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Sdl" rel="Chapter" href="Sdl.html">
+<link title="Sdlcdrom" rel="Chapter" href="Sdlcdrom.html">
+<link title="Sdltimer" rel="Chapter" href="Sdltimer.html">
+<link title="Sdljoystick" rel="Chapter" href="Sdljoystick.html">
+<link title="Sdlkey" rel="Chapter" href="Sdlkey.html">
+<link title="Sdlmouse" rel="Chapter" href="Sdlmouse.html">
+<link title="Sdlevent" rel="Chapter" href="Sdlevent.html">
+<link title="Sdlvideo" rel="Chapter" href="Sdlvideo.html">
+<link title="Sdlwm" rel="Chapter" href="Sdlwm.html">
+<link title="Sdlttf" rel="Chapter" href="Sdlttf.html">
+<link title="Sdlloader" rel="Chapter" href="Sdlloader.html">
+<link title="Sdlmixer" rel="Chapter" href="Sdlmixer.html">
+<link title="Sdlgfx" rel="Chapter" href="Sdlgfx.html"><link title="Joystick state " rel="Section" href="#3_Joystickstate">
+<title>OCamlSDL 0.9.1 : Sdljoystick</title>
+</head>
+<body>
+<div class="navbar"><a href="Sdltimer.html">Previous</a>
+&nbsp;<a href="index.html">Up</a>
+&nbsp;<a href="Sdlkey.html">Next</a>
+</div>
+<center><h1>Module <a href="type_Sdljoystick.html">Sdljoystick</a></h1></center>
+<br>
+<pre><span class="keyword">module</span> Sdljoystick: <code class="code">sig</code> <a href="Sdljoystick.html">..</a> <code class="code">end</code></pre>Module for SDL joystick event handling<br>
+<hr width="100%">
+<br>
+In order to use these functions, <a href="Sdl.html#VALinit"><code class="code">Sdl.init</code></a> must have been called
+   with the `JOYSTICK flag.  This causes SDL to scan the system
+   for joysticks, and load appropriate drivers.<br>
+<pre><span id="EXCEPTIONSDLjoystick_exception"><span class="keyword">exception</span> SDLjoystick_exception</span> <span class="keyword">of</span> <code class="type">string</code></pre>
+<div class="info">
+exception for error reporting<br>
+</div>
+<pre><span id="TYPEt"><span class="keyword">type</span> <code class="type"></code>t</span> </pre>
+<div class="info">
+The joystick abstract type used to identify an SDL joystick<br>
+</div>
+
+<pre><span id="VALnum_joysticks"><span class="keyword">val</span> num_joysticks</span> : <code class="type">unit -> int</code></pre><div class="info">
+Count the number of joysticks attached to the system<br>
+</div>
+<pre><span id="VALname"><span class="keyword">val</span> name</span> : <code class="type">int -> string</code></pre><div class="info">
+Get the implementation dependent name of a joystick.
+   This can be called before any joysticks are opened.<br>
+</div>
+<pre><span id="VALopen_joystick"><span class="keyword">val</span> open_joystick</span> : <code class="type">int -> <a href="Sdljoystick.html#TYPEt">t</a></code></pre><div class="info">
+Open a joystick for use - the index passed as an argument refers to
+   the N'th joystick on the system.  This index is the value which will
+   identify this joystick in future joystick events.<br>
+<b>Raises</b> <code>SDLjoystick_exception</code> if an error occurred<br>
+</div>
+<pre><span id="VALopened"><span class="keyword">val</span> opened</span> : <code class="type">int -> bool</code></pre><div class="info">
+<b>Returns</b> <code class="code">true</code> if joystick has been opened<br>
+</div>
+<pre><span id="VALindex"><span class="keyword">val</span> index</span> : <code class="type"><a href="Sdljoystick.html#TYPEt">t</a> -> int</code></pre><div class="info">
+Get the device index of an opened joystick<br>
+</div>
+<pre><span id="VALnum_axes"><span class="keyword">val</span> num_axes</span> : <code class="type"><a href="Sdljoystick.html#TYPEt">t</a> -> int</code></pre><div class="info">
+Get the number of general axis controls on a joystick<br>
+</div>
+<pre><span id="VALnum_balls"><span class="keyword">val</span> num_balls</span> : <code class="type"><a href="Sdljoystick.html#TYPEt">t</a> -> int</code></pre><div class="info">
+Get the number of trackballs on a joystick
+   Joystick trackballs have only relative motion events associated
+   with them and their state cannot be polled.<br>
+</div>
+<pre><span id="VALnum_hats"><span class="keyword">val</span> num_hats</span> : <code class="type"><a href="Sdljoystick.html#TYPEt">t</a> -> int</code></pre><div class="info">
+Get the number of POV hats on a joystick<br>
+</div>
+<pre><span id="VALnum_buttons"><span class="keyword">val</span> num_buttons</span> : <code class="type"><a href="Sdljoystick.html#TYPEt">t</a> -> int</code></pre><div class="info">
+Get the number of buttons on a joystick<br>
+</div>
+<br>
+<span id="3_Joystickstate"><h3>Joystick state </h3></span><br>
+<pre><span id="VALupdate"><span class="keyword">val</span> update</span> : <code class="type"><a href="Sdljoystick.html#TYPEt">t</a> -> unit</code></pre><div class="info">
+Update the current state of the open joysticks.
+   This is called automatically by the event loop if any joystick
+   events are enabled.<br>
+</div>
+<br>
+Enable/disable joystick event polling.
+   If joystick events are disabled, you must call <a href="Sdljoystick.html#VALupdate"><code class="code">Sdljoystick.update</code></a>
+   yourself and check the state of the joystick when you want joystick
+   information.<br>
+<pre><span id="VALset_event_state"><span class="keyword">val</span> set_event_state</span> : <code class="type">bool -> unit</code></pre><pre><span id="VALget_event_state"><span class="keyword">val</span> get_event_state</span> : <code class="type">unit -> bool</code></pre><pre><span id="TYPEhat_value"><span class="keyword">type</span> <code class="type"></code>hat_value</span> = <code class="type">int</code> </pre>
+
+<pre><span id="VALhat_centered"><span class="keyword">val</span> hat_centered</span> : <code class="type"><a href="Sdljoystick.html#TYPEhat_value">hat_value</a></code></pre><pre><span id="VALhat_up"><span class="keyword">val</span> hat_up</span> : <code class="type"><a href="Sdljoystick.html#TYPEhat_value">hat_value</a></code></pre><pre><span id="VALhat_right"><span class="keyword">val</span> hat_right</span> : <code class="type"><a href="Sdljoystick.html#TYPEhat_value">hat_value</a></code></pre><pre><span id="VALhat_down"><span class="keyword">val</span> hat_down</span> : <code class="type"><a href="Sdljoystick.html#TYPEhat_value">hat_value</a></code></pre><pre><span id="VALhat_left"><span class="keyword">val</span> hat_left</span> : <code class="type"><a href="Sdljoystick.html#TYPEhat_value">hat_value</a></code></pre><pre><span id="VALhat_rightup"><span class="keyword">val</span> hat_rightup</span> : <code class="type"><a href="Sdljoystick.html#TYPEhat_value">hat_value</a></code></pre><pre><span id="VALhat_rightdown"><span class="keyword">val</span> hat_rightdown</span> : <code class="type"><a href="Sdljoystick.html#TYPEhat_value">hat_value</a></code></pre><pre><span id="VALhat_leftup"><span class="keyword">val</span> hat_leftup</span> : <code class="type"><a href="Sdljoystick.html#TYPEhat_value">hat_value</a></code></pre><pre><span id="VALhat_leftdown"><span class="keyword">val</span> hat_leftdown</span> : <code class="type"><a href="Sdljoystick.html#TYPEhat_value">hat_value</a></code></pre><pre><span id="VALget_axis"><span class="keyword">val</span> get_axis</span> : <code class="type"><a href="Sdljoystick.html#TYPEt">t</a> -> int -> int</code></pre><pre><span id="VALget_hat"><span class="keyword">val</span> get_hat</span> : <code class="type"><a href="Sdljoystick.html#TYPEt">t</a> -> int -> <a href="Sdljoystick.html#TYPEhat_value">hat_value</a></code></pre><pre><span id="VALget_ball"><span class="keyword">val</span> get_ball</span> : <code class="type"><a href="Sdljoystick.html#TYPEt">t</a> -> int -> int * int</code></pre><pre><span id="VALget_button"><span class="keyword">val</span> get_button</span> : <code class="type"><a href="Sdljoystick.html#TYPEt">t</a> -> int -> bool</code></pre><pre><span id="VALclose"><span class="keyword">val</span> close</span> : <code class="type"><a href="Sdljoystick.html#TYPEt">t</a> -> unit</code></pre><div class="info">
+Close a joystick previously opened with <a href="Sdljoystick.html#VALopen_joystick"><code class="code">Sdljoystick.open_joystick</code></a><br>
+</div>
+</body></html>
