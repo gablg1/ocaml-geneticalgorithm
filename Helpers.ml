@@ -15,6 +15,9 @@ sig
   
   (* halfway_color c1 c2 returns a color that's halfway between c1 and c2 *)
   val halfway_color : color -> color -> color
+  
+  (* Prints a point *)
+  val print_point : (float * float) -> unit
 end
 
 (* Implements Helpers *)
@@ -35,6 +38,9 @@ struct
     let (r1,g1,b1) = to_rgb c1
     and (r2,g2,b2) = to_rgb c2 in
     Graphics.rgb (f r1 r2) (f g1 g2) (f b1 b2)
+    
+  let print_point (x,y) =
+    Printf.printf "(%f, %f)\n" x y
 end
 
 

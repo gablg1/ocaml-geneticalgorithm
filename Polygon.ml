@@ -56,7 +56,7 @@ struct
 
   let point_reproduction std_dev p1 p2 =
     let (x,y) = halfway_point p1 p2 in
-    (Statistics.gaussian_pick x std_dev, Statistics.gaussian_pick std_dev y)
+    (Statistics.gaussian_pick std_dev x, Statistics.gaussian_pick std_dev y)
 
   let color_reproduction std_dev c1 c2 =
     let f a1 a2 = Int.of_float (Statistics.gaussian_pick std_dev ((Float.of_int (a1 + a2)) /. 2.0)) in
@@ -89,6 +89,13 @@ struct
     assert(color p3 = green);
     let r,g,b = rgb p3 in
     assert(Graphics.rgb r g b = green)
+
+  (* Prints a polygon for testing purposes *)
+  let print_polygon p =
+    print_endline "######### Start of Polygon #########";
+    List.iter ~f:(fun p -> print_point p) (float_points p);
+    Printf.printf "Color: %x\n" (color p);
+    print_endline "######### End of Polygon #########"
 
   let test_sexual_reproduction () =
     let p1 = make_polygon [(0,0);(1,1);(2,2);(3,3)] blue in
