@@ -44,7 +44,8 @@ struct
   type polygon = (float * float) array * color
 
   let fresh a b v = 
-    let points = Array.init v ~f:(fun _ -> random_point (Float.of_int a) (Float.of_int b)) in
+    let fa, fb = Float.of_int a, Float.of_int b in
+    let points = Array.init v ~f:(fun _ -> random_point fa fb) in
     (points, random_color ())
 
   let make_int lst = Array.map ~f:(apply_point Int.of_float) lst

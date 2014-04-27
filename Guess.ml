@@ -88,10 +88,7 @@ struct
     assert(equals (sexual_reproduction 0. g1 g3) (make [r3]));
     assert(equals (sexual_reproduction 0. g4 g5) (make [r1; r2]));
     assert(equals (sexual_reproduction 0. g4 g6) (make [r3; r1]));
-    assert(equals (sexual_reproduction 0. g5 g6) (make [r2; r3]));
-    
-    let d = sexual_reproduction 1. g4 g6 in
-    print d
+    assert(equals (sexual_reproduction 0. g5 g6) (make [r2; r3]))
 
   let run_tests () =
     test_sexual_reproduction ();
@@ -99,4 +96,4 @@ struct
 end
 
 (* Applies the functor to make a Guess using our implementation of Polygon *)
-module Guess = MakeGuess(Polygon)
+module Guess : GUESS = MakeGuess(Polygon)

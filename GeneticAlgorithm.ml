@@ -27,6 +27,9 @@ sig
   (* Returns the current best guess of this model *)
   val get_best : ga -> guess
   
+  (* Prints the current state of this genetic algorithm *)
+  val print : ga -> unit
+  
   (* Runs tests on this Module *)
   val run_tests : unit -> unit
 end
@@ -35,17 +38,16 @@ module MakeGeneticAlgorithm (G : GUESS) : GENETIC_ALGORITHM with type guess = G.
 struct
   type guess = G.guess
 
-  type ga = guess array * image
+  type ga = guess array * color array array
   
   let guesses (gs,_) = gs
   
   let target (_,img) = img
 
-  (* Returns a list of N random guesses *)
   let fresh n m v =
     (* Placeholder image *)
-    let width, height = 1, 1 in
-    let target = Graphics.create_image width height in
+    let width, height = 300, 600 in
+    let target = Array.make_matrix ~dimx:width ~dimy:height 1 in
     
     (* Initializes the random guesses *)
     (Array.init n ~f:(fun _ -> G.fresh width height m v), target)
@@ -61,7 +63,17 @@ struct
 
   let get_best _ = failwith "TODO" 
 
+  let print ga =
+    print_endline "################### Start of Genetic Algorithm ###################";
+    Array.iter ~f:(G.print) (guesses ga);
+    print_endline "################### End of Genetic Algorithm ###################";
+    print_endline ""
+
   let run_tests () =
+    print (fresh 2 3 4);
     ()
     
 end
+
+(* Applies the functor to make a GeneticAlgorithm using our implementation of Guess *)
+module GeneticAlgorithm : GENETIC_ALGORITHM = MakeGeneticAlgorithm(Guess) 
