@@ -163,6 +163,7 @@ let compare_pixmap (caa1 : color array array) (caa2 : color array array) : int a
   for i = 0 to n1 - 1 do result.(i) <- (compare_c_array caa1.(i) caa2.(i)) done; 
   result;; 
 
+(* counts the number of elements in an array array, used to average cost functions *) 
 let counts_array (iaa : int array array) : int = 
   let n1 = Array.length iaa in 
   let result = ref 0 in 
@@ -171,45 +172,121 @@ let counts_array (iaa : int array array) : int =
 
 (* counts the number of items in the int matrix *) 
 let counts_array (iaa : int array array) : int = 
-   Array.fold_right ~f:(fun x rest -> (Array.length x) + rest) iaa 0  
+   Array.fold_right iaa  ~f:(fun x rest -> (Array.length x) + rest) ~init:0  
 ;; 
-let average_array (iaa : int array array) : int = 
+(* sums all of the costs in an array *) 
+let sum_array (ia : int array) : int = 
+   Array.fold_right ia ~f: (+) ~init:0 
+
+(* gives the average cost function of the int matrix as a float *) 
+let average_array (iaa : int array array) : float = 
+  let total =  Array.fold_right iaa ~f:(fun x rest -> (sum_array x) + rest) ~init:0 in 
+  let total' = float total in 
+  let num_el = float (counts_array iaa) in 
+  total' /. num_el 
+
+(* returns the fitness of a color matrix compared to another color matrix *)   
+let cost_of_mat (caa1 : color array array) (caa2 : color array array) : float = 
+  let cost_mat = compare_pixmap caa1 caa2 in 
+  average_array cost_mat
 
 
-(* works on these two lists *) 
-let blue_list = Array.create 2 (Array.create 2 blue) in
-let red_list = Array.create 2 (Array.create 2 red) in 
-compare_pixmap blue_list red_list;;
-(*
-let create_pixmap x y f g s = 
-   let r = Array.make_matrix x y false in 
-   { w = x; h = y; fg = f;  bg = g; pix = r; s = s} ;;
+(* Some test functions for the functions above *)  
+let blue_list_list = Array.create 2 (Array.create 2 blue) ;; 
+let red_list_list = Array.create 2 (Array.create 2 red) ;;
+assert((counts_array red_list_list) = 4);
+assert((compare_pixmap blue_list_list red_list_list = [|[|510; 510|]; [|510; 510|]|])); 
+assert((cost_of_mat blue_list_list red_list_list = 510.0));
+assert(( cost_of_mat blue_list_list blue_list_list = 0.0));
+let green_list_list = Array.create 2 (Array.create 3 green);; 
+cost_of_mat blue_list_list green_list_list;;  
+let array1 = Array.create 2 2 in 
+assert(sum_array array1 = 4); 
+let mat1 = Array.create 2 (Array.create 2 2) in 
+let mat2 = Array.create 2 (Array.create 2 4) in 
+assert(average_array mat1 = 2.0);; 
 
- *)   
+
+(* defines type triangle as a record with three points *)  
+type triangle = {p1 : int * int; p2: int * int; p3 : int * int} 
+let get_point1 t = t.p1;; 
+let get_point2 t = t.p2;;
+let get_point3 t = t.p3;; 
+(* takes in two points and gives the equation between them *)  
+let intersecting_line (p1 : int * int) (p2 : int * int) : float -> float = 
+  let (x1, y1) = p1 in 
+  let (x2, y2) = p2 in 
+  fun x -> ( (float (y2 - y1)) /. (float (x2 - x1)) *. (x -. (float x1)) +. (float y1))
+
+
+(* some corner cases have not been solved, i.e.  lines that are 
+straight up *) 
+let equation1 = intersecting_line (0,0) (3,4);;
+assert (equation1 3. = 4.);;
+let equation2 = intersecting_line (0,0) (0, 3);; 
+(* (assert equation2 4. = inf) ;; *) 
+let equation3 = intersecting_line (0,0) (3,0);; 
+assert (equation3 4. = 0.);; 
+
+
+(* takes in a triangle and give back the equations of the intersecting lines *) 
+let triangle_lines (tr : triangle) : ('a -> 'a) * ('a -> 'a) * ('a -> 'a) =  
+  let equation1 = intersecting_line (get_point1 tr) (get_point2 tr) in 
+  let equation2 = intersecting_line (get_point1 tr) (get_point3 tr) in 
+  let equation3 = intersecting_line (get_point2 tr) (get_point3 tr) in 
+  (equation1, equation2, equation3)
+
+(* checks to see whether a point is inside a triangle *) 
+let is_in_triangle (tr : triangle) (point : int * int) : bool = 
+
+
+
+
+ 
 (* 
 
+ - Create an equation based upon each of those points that gives the line 
+                - iF it is a concave polygon then find the three closest points 
+                - Create a function that tells whether a point is bound by the points of a triangle. 
+                    -    Creates a function that gives the equations of the three lines.  of each of the points of the triangle 
+                    - if the point is in all three of these planes then the point is in the triangle. 
+                    - Otherwise it is not in the trangle. 
+                - Create an equation that can keep track of the point in the matrix. 
 
-1. Figure out what a bit map looks like/how it is represented. If it is just an array of arrays (Or a matrix
-are the values then floats?  Could I just make a small bit map to use  to create the function
-"Compare bit maps"  - so, I think I am going to assume that when we have over lapping rgb files
-the two files simply average out.
-
-
-2. Make a function that compares two colors and gives a mini cost for that. 
-   
-   - Then make the color go into the three values   - then compare the three values and gi   - First iterate through a bit mapve a number based upon the result 
- 
-2. Create a function that then compares two bit maps point by point, and then for every point gives a number 
-from 1 - 100 (or whatever).
-- Create a helper function that compares two points.
-
-3. Create a function that then averages the all of the points - returning a cost function. 
 
 4. Create a function that converts a guess to a bitmap 
+
 - Createa function that stores in the width and height, a and then  
 is an array of array that stores all of the data points that we want? 
+       -
+       -  Figure out what are the limitations to the polygon's width and height points
+
+       - Figure out what the equation will be between the polygons (to see whether a certain point is inside or not inside
+       - Create a function that maps through the color array, (Does this color array have points?) (Are the limitations of the 
+         polygon what are defined by the float? 
+
+
+        1. Takes in a guess and gets out the W and H 
+        2. Takes in the width and height and creates a color matrix of white 
+        3. Takes in a polygon and then cuts off the float points 
+        4. Uses the polygon's to form an equation that says whether or not a point would be in it 
+                
+                - Create an equation that takes four points and then gives the four points that would pair togethr  (I.e. those that are closest)  
+                - Create an equation based upon each of those points that gives the line 
+                - iF it is a concave polygon then find the three closest points 
+                - Create a function that tells whether a point is bound by the points of a triangle. 
+                    -    Creates a function that gives the equations of the three lines.  of each of the points of the triangle 
+                    - if the point is in all three of these planes then the point is in the triangle. 
+                    - Otherwise it is not in the trangle. 
+                - Create an equation that can keep track of the point in the matrix. 
+
+pairs up the points that are closes Is there a way to simplify this even more? Say between two points creates an equation. 
+
 - This will be interesting to represent. I'm still thinking about the best way to 
 go about doing this. 
+
+- Create a function that when taking in two colors averages the two rgb coordinates 
+- Create a function that takes a polygon makes it into a color matrix. 
 
 
 
