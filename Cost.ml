@@ -3,6 +3,7 @@
 open Graphics
 open Array 
 open Core.Std
+open Helper.Helper
 (*open Images
 open OImages*)
 (* XXX Remember to open the CamlImages file
@@ -130,11 +131,95 @@ fun open_image_print (i : image) : int ->
   let image = Graphics.dump_image i in 
   Array.get 0 (Array.get 0 image) 
   
- *)  
+ *)
+(* converts a color to an rgb file *)  
+ let to_rgb c =
+    let r = c / 65536 and g = c / 256 mod 256 and b = c mod 256 in (r,g,b)
+;; 
+
+(* helper function that compares colors and gives a cost value for the two *)
+(* Lower the cost the  better *)  
+let compare_colors (c1 : color) (c2 : color) : int =  
+  let (r1, b1, g1) = to_rgb c1 in 
+  let (r2, b2, g2) = to_rgb c2 in 
+  let pre_cost = abs(r2 - r1) + abs(b2 - b1) + abs(g2 - g1) in 
+  pre_cost 
+;; 
+
+
+(* takes in two color arrays and compares them point by point *) 
+let compare_c_array (ca1 : color array) (ca2 : color array) : int array =
+  let n1 = Array.length ca1
+  and n2 = Array.length ca2 in
+  let result = Array.create (max n1 n2) 0 in
+  for i = 0 to n1 - 1 do result.(i) <- (compare_colors ca1.(i) ca2.(i)) done; 
+  result;;
+
+(* compares two color array array point by point and returns an int matrix *) 
+let compare_pixmap (caa1 : color array array) (caa2 : color array array) : int array array = 
+  let n1 = Array.length caa1
+  and n2 = Array.length caa2 in
+  let result = Array.create (max n1 n2) caa1.(0) in
+  for i = 0 to n1 - 1 do result.(i) <- (compare_c_array caa1.(i) caa2.(i)) done; 
+  result;; 
+
+let counts_array (iaa : int array array) : int = 
+  let n1 = Array.length iaa in 
+  let result = ref 0 in 
+  for i = 0 to n1 - 1 do result := ((Array.length iaa.(i)) + !result) done;
+  !result;;
+
+(* counts the number of items in the int matrix *) 
+let counts_array (iaa : int array array) : int = 
+   Array.fold_right ~f:(fun x rest -> (Array.length x) + rest) iaa 0  
+;; 
+let average_array (iaa : int array array) : int = 
+
+
+(* works on these two lists *) 
+let blue_list = Array.create 2 (Array.create 2 blue) in
+let red_list = Array.create 2 (Array.create 2 red) in 
+compare_pixmap blue_list red_list;;
+(*
+let create_pixmap x y f g s = 
+   let r = Array.make_matrix x y false in 
+   { w = x; h = y; fg = f;  bg = g; pix = r; s = s} ;;
+
+ *)   
+(* 
+
+
+1. Figure out what a bit map looks like/how it is represented. If it is just an array of arrays (Or a matrix
+are the values then floats?  Could I just make a small bit map to use  to create the function
+"Compare bit maps"  - so, I think I am going to assume that when we have over lapping rgb files
+the two files simply average out.
+
+
+2. Make a function that compares two colors and gives a mini cost for that. 
+   
+   - Then make the color go into the three values   - then compare the three values and gi   - First iterate through a bit mapve a number based upon the result 
+ 
+2. Create a function that then compares two bit maps point by point, and then for every point gives a number 
+from 1 - 100 (or whatever).
+- Create a helper function that compares two points.
+
+3. Create a function that then averages the all of the points - returning a cost function. 
+
+4. Create a function that converts a guess to a bitmap 
+- Createa function that stores in the width and height, a and then  
+is an array of array that stores all of the data points that we want? 
+- This will be interesting to represent. I'm still thinking about the best way to 
+go about doing this. 
+
+
+
 (* 
 (* converts guess to an image *) 
-fun make_image (g: guess) : image -> 
+fun make_image (g: guess) : image ->
+XXX Do I want this "image" to actually just be an rmb map of rgb values? 
+
 
 (* Compares guess and image and returns the relative fitness of guess *) 
 fun cost (g : guess) (i : image) : int -> 
+to_rgb will help me compare the rgb values
  *) 
