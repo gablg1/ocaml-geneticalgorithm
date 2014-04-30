@@ -17,7 +17,7 @@ sig
   val polygons : guess -> polygon list
 
   (* Returns an image of the guess *)
-  val image_of_guess : guess -> image
+  val matrix_of_guess : guess -> color array array
   
   (* Measures the fitness of the guess against the target.
    * The greater the weight (between 0 and MAX_COST) the better. *)

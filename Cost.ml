@@ -142,8 +142,7 @@ fun open_image_print (i : image) : int ->
 let compare_colors (c1 : color) (c2 : color) : int =  
   let (r1, b1, g1) = to_rgb c1 in 
   let (r2, b2, g2) = to_rgb c2 in 
-  let pre_cost = abs(r2 - r1) + abs(b2 - b1) + abs(g2 - g1) in 
-  pre_cost 
+  abs(r2 - r1) + abs(b2 - b1) + abs(g2 - g1) 
 ;; 
 
 
@@ -157,22 +156,24 @@ let compare_c_array (ca1 : color array) (ca2 : color array) : int array =
 
 (* compares two color array array point by point and returns an int matrix *) 
 let compare_pixmap (caa1 : color array array) (caa2 : color array array) : int array array = 
-  let n1 = Array.length caa1
+  Array.map2_exn caa1 caa2 ~f:(compare_colors)
+(*let n1 = Array.length caa1
   and n2 = Array.length caa2 in
   let result = Array.create (max n1 n2) caa1.(0) in
-  for i = 0 to n1 - 1 do result.(i) <- (compare_c_array caa1.(i) caa2.(i)) done; 
-  result;; 
+  for i = 0 to n1 - 1 do result.(i) <- (compare_c_array caa1.(i) caa2.(i)) done;
+  result;; *)
 
 (* counts the number of elements in an array array, used to average cost functions *) 
-let counts_array (iaa : int array array) : int = 
+(*let counts_array (iaa : int array array) : int = 
   let n1 = Array.length iaa in 
   let result = ref 0 in 
   for i = 0 to n1 - 1 do result := ((Array.length iaa.(i)) + !result) done;
   !result;;
-
+ *)
 (* counts the number of items in the int matrix *) 
-let counts_array (iaa : int array array) : int = 
-   Array.fold_right iaa  ~f:(fun x rest -> (Array.length x) + rest) ~init:0  
+let counts_array (iaa : int array array) : int =
+  (Array.length iaa) * (Array.length iaa.(0))
+			(* Array.fold_right iaa  ~f:(fun x rest -> (Array.length x) + rest) ~init:0  *)
 ;; 
 (* sums all of the costs in an array *) 
 let sum_array (ia : int array) : int = 
@@ -198,6 +199,7 @@ assert((counts_array red_list_list) = 4);
 assert((compare_pixmap blue_list_list red_list_list = [|[|510; 510|]; [|510; 510|]|])); 
 assert((cost_of_mat blue_list_list red_list_list = 510.0));
 assert(( cost_of_mat blue_list_list blue_list_list = 0.0));
+
 let green_list_list = Array.create 2 (Array.create 3 green);; 
 cost_of_mat blue_list_list green_list_list;;  
 let array1 = Array.create 2 2 in 
@@ -207,53 +209,35 @@ let mat2 = Array.create 2 (Array.create 2 4) in
 assert(average_array mat1 = 2.0);; 
 
 
-(* defines type triangle as a record with three points *)  
-type triangle = {p1 : int * int; p2: int * int; p3 : int * int} 
-let get_point1 t = t.p1;; 
-let get_point2 t = t.p2;;
-let get_point3 t = t.p3;; 
-(* takes in two points and gives the equation between them *)  
-let intersecting_line (p1 : int * int) (p2 : int * int) : float -> float = 
-  let (x1, y1) = p1 in 
-  let (x2, y2) = p2 in 
-  fun x -> ( (float (y2 - y1)) /. (float (x2 - x1)) *. (x -. (float x1)) +. (float y1))
+(* takes in two colors and then gives back a color that is the average of the two *) 
+let color_combiner (c1 : color) (c2 : color) : color = 
+  let (r1, b1, g1) = to_rgb c1 in 
+  let (r2, b2, g2) = to_rgb c2 in 
+  let r3 =  ((r2 + r1) / 2) in 
+  let b3 =  ((b2 + b1) / 2) in 
+  let g3 =  ((g2 + g1) / 2) in 
+  rgb r3 b3 g3  
+;; 
+
+(* creates a black color matrix *) 
+let create_matrix w h : color array array  = Array.make_matrix ~dimx:w ~dimy:h 0 ;; 
+
+(* updates the matrix for each circle that is passed in *)  
+let update_matrix (caa : color array array) (c : circle) : color array array = 
+  let n1 = Array.length caa 
+  and n2 = Array.length caa.(0) in
+  for i = 0 to n1 - 1 do 
+  for j = 0 to n2 - 1 do  
+  let curr_array = Array.(i) in 
+  if in_circle c curr_array.(j) then 
+  Array.set curr_array j (color_combiner (color c) curr_array.(j) done;    
 
 
-(* some corner cases have not been solved, i.e.  lines that are 
-straight up *) 
-let equation1 = intersecting_line (0,0) (3,4);;
-assert (equation1 3. = 4.);;
-let equation2 = intersecting_line (0,0) (0, 3);; 
-(* (assert equation2 4. = inf) ;; *) 
-let equation3 = intersecting_line (0,0) (3,0);; 
-assert (equation3 4. = 0.);; 
-
-
-(* takes in a triangle and give back the equations of the intersecting lines *) 
-let triangle_lines (tr : triangle) : ('a -> 'a) * ('a -> 'a) * ('a -> 'a) =  
-  let equation1 = intersecting_line (get_point1 tr) (get_point2 tr) in 
-  let equation2 = intersecting_line (get_point1 tr) (get_point3 tr) in 
-  let equation3 = intersecting_line (get_point2 tr) (get_point3 tr) in 
-  (equation1, equation2, equation3)
-
-(* checks to see whether a point is inside a triangle *) 
-let is_in_triangle (tr : triangle) (point : int * int) : bool = 
-
-
+Array.map  (Array.map (fun x -> if 
 
 
  
 (* 
-
- - Create an equation based upon each of those points that gives the line 
-                - iF it is a concave polygon then find the three closest points 
-                - Create a function that tells whether a point is bound by the points of a triangle. 
-                    -    Creates a function that gives the equations of the three lines.  of each of the points of the triangle 
-                    - if the point is in all three of these planes then the point is in the triangle. 
-                    - Otherwise it is not in the trangle. 
-                - Create an equation that can keep track of the point in the matrix. 
-
-
 4. Create a function that converts a guess to a bitmap 
 
 - Createa function that stores in the width and height, a and then  
@@ -268,17 +252,14 @@ is an array of array that stores all of the data points that we want?
 
         1. Takes in a guess and gets out the W and H 
         2. Takes in the width and height and creates a color matrix of white 
-        3. Takes in a polygon and then cuts off the float points 
-        4. Uses the polygon's to form an equation that says whether or not a point would be in it 
-                
-                - Create an equation that takes four points and then gives the four points that would pair togethr  (I.e. those that are closest)  
-                - Create an equation based upon each of those points that gives the line 
-                - iF it is a concave polygon then find the three closest points 
-                - Create a function that tells whether a point is bound by the points of a triangle. 
-                    -    Creates a function that gives the equations of the three lines.  of each of the points of the triangle 
-                    - if the point is in all three of these planes then the point is in the triangle. 
-                    - Otherwise it is not in the trangle. 
-                - Create an equation that can keep track of the point in the matrix. 
+        3. Takes in a circle and then goes through every point in the color matrix, if it is within the circle than we change the color 
+ to that of the circle. 
+                - Figure out how to update a matrix 
+                ANS = Array.set 
+        4. If the color is already in the circle, then update it to right in between the two colors 
+                - Create a function that, when takes in two colors gives the average of the two  
+        5. Goes through a guess doing the same thing for each circle 
+
 
 pairs up the points that are closes Is there a way to simplify this even more? Say between two points creates an equation. 
 
@@ -300,3 +281,35 @@ XXX Do I want this "image" to actually just be an rmb map of rgb values?
 fun cost (g : guess) (i : image) : int -> 
 to_rgb will help me compare the rgb values
  *) 
+
+
+(*
+(* takes in two points and gives the equation between them *)  
+let intersecting_line (p1 : int * int) (p2 : int * int) : float -> float = 
+  let (x1, y1) = p1 in 
+  let (x2, y2) = p2 in 
+  fun x -> ( (float (y2 - y1)) /. (float (x2 - x1)) *. (x -. (float x1)) +. (float y1))
+
+
+(* some corner cases have not been solved, i.e.  lines that are 
+straight up *) 
+let equation1 = intersecting_line (0,0) (3,4);;
+assert (equation1 3. = 4.);;
+let equation2 = intersecting_line (0,0) (0, 3);; 
+(* (assert equation2 4. = inf) ;; *) 
+let equation3 = intersecting_line (0,0) (3,0);; 
+assert (equation3 4. = 0.);; 
+
+
+(* takes in a triangle and give back the equations of the intersecting lines *) 
+let triangle_lines (tr : triae) : ('a -> 'a) * ('a -> 'a) * ('a -> 'a) =  
+  let equation1 = intersecting_line (get_point1 tr) (get_point2 tr) in 
+  let equation2 = intersecting_line (get_point1 tr) (get_point3 tr) in 
+  let equation3 = intersecting_line (get_point2 tr) (get_point3 tr) in 
+  (equation1, equation2, equation3)
+
+(* checks to see whether a point is inside a triangle *) 
+let is_in_triangle (tr : triangle) (point : int * int) : bool = 
+
+
+  *) 
