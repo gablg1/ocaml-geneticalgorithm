@@ -4,6 +4,10 @@ open Graphics
 (* Generic helpers used throughout the program *)
 module type HELPERS =
 sig
+  (* valid (w,h) (x,y) returns whether point (x,y) is within
+   * the boundaries of (0,0) (w,h) *)
+  val valid_point : (int * int) -> (float * float)  -> bool
+  
   (* apply_point f (x, y) returns (f x, f y) *)
   val apply_point : ('a -> 'b) -> ('a * 'a) -> ('b * 'b)
 
@@ -29,6 +33,8 @@ end
 (* Implements Helpers *)
 module Helpers : HELPERS  =
 struct
+  let valid_point (w,h) (x,y) = x > 0. && y > 0. && x < Float.of_int w && y < Float.of_int h
+
   let apply_point f pt = 
     let (x, y) = pt in 
     (f x, f y)

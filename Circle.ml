@@ -6,6 +6,9 @@ open Helpers.Helpers
 (* Module that performs operations on Circles *)
 module type CIRCLE =
 sig
+  (* Raised when there is incompatibility of max width/height *)
+  exception DimensionTrouble
+
   type circle
   
   (* 'fresh a b v' returns a fresh randomly initialized circle 
@@ -18,8 +21,14 @@ sig
   (* Returns the radius of the circle *)
   val radius : circle -> float
   
-  (* Makes a new circle out of a center, a radius, and a color *)
-  val make : (float * float) -> float -> color -> circle
+  (* Returns the maximum width of the environment *)
+  val width : circle -> int
+  
+  (* Returns the maximum height of the environment *)
+  val height : circle -> int
+  
+  (* Makes a new circle out of a (width, height), a center, a radius, and a color *)
+  val make : (int * int) -> (float * float) -> float -> color -> circle
   
   (* Returns the color of the circle as an RGB triple *)
   val rgb : circle -> (int * int * int)
@@ -44,19 +53,20 @@ sig
   val run_tests : unit -> unit
 end
 
-module Circle : CIRCLE with type circle= (float * float) * float * color =
+module Circle : CIRCLE =
 struct
+  exception DimensionTrouble
   
-  type circle = (float * float) * float * color
+  type circle = (int * int) * (float * float) * float * color
 
   let fresh a b = 
     let fa, fb = Float.of_int a, Float.of_int b in
-    (random_point fa fb, Random.float (max fa fb), random_color ())
+    ((a, b), random_point fa fb, Random.float (max fa fb), random_color ())
 
-  let make (ctr : (float * float)) (r : float) (c : color) = (ctr,r,c)
+  let make dim (ctr : (float * float)) (r : float) (c : color) = (dim,ctr,r,c)
   
-  let center (ctr,_,_) = ctr
-  
+  let center (_,ctr,_,_) = ctr
+
   let center_x circ = 
     let x,_ = center circ in 
     x
@@ -64,48 +74,68 @@ struct
   let center_y circ = 
     let _,y = center circ in 
     y
+  
+  let dimensions (d,_,_,_) = d
+  
+  let width circ = 
+    let w,_ = dimensions circ in
+    w
+  
+  let height circ = 
+    let _,h = dimensions circ in
+    h
 
-  let radius (_,r,_) = r
+  let radius (_,_,r,_) = r
 
-  let color (_,_,col) = col
+  let color (_,_,_,col) = col
 
   let rgb circ = to_rgb (color circ)
+
+  let dimensions_agree g1 g2 = (width g1 = width g2) && height g1 = height g2
 
   let contains circ (x,y) =
     let x', y' = center_x circ, center_y circ in
     (radius circ)**2. >= (x' -. x)**2. +. (y' -. y)**2.
 
-  let point_reproduction std_dev p1 p2 =
+  let point_reproduction std_dev dim p1 p2 =
     let (x,y) = halfway_point p1 p2 in
-    (Statistics.gaussian_pick std_dev x, Statistics.gaussian_pick std_dev y)
+    
+    let new_x = Statistics.gaussian_pick std_dev x in
+    let new_y = Statistics.gaussian_pick std_dev y in
+    
+    (* Only updates point if it's valid, otherwise keeps halfway point *)
+    if valid_point dim (new_x,new_y) then (new_x,new_y)
+    else (x,y)
 
   let color_reproduction std_dev c1 c2 =
-    let f a1 a2 = Int.of_float (Statistics.gaussian_pick std_dev ((Float.of_int (a1 + a2)) /. 2.0)) in
+    let f a1 a2 = abs(Int.of_float (Statistics.gaussian_pick std_dev ((Float.of_int (a1 + a2)) /. 2.0))) in
     let (r1,g1,b1) = to_rgb c1
     and (r2,g2,b2) = to_rgb c2 in
     Graphics.rgb (f r1 r2) (f g1 g2) (f b1 b2)
     
-  let float_reproduction std_dev r1 r2 =
+  let pos_float_reproduction std_dev r1 r2 =
     let mid_point = (r1 +. r2) /. 2. in
-    Statistics.gaussian_pick std_dev mid_point  
+    Float.abs(Statistics.gaussian_pick std_dev mid_point)
   
   let sexual_reproduction std_dev circ1 circ2 = 
-    let new_center = point_reproduction std_dev (center circ1) (center circ2) in
-    let new_radius = float_reproduction std_dev (radius circ1) (radius circ2) in
+    if not (dimensions_agree circ1 circ2) then raise DimensionTrouble else
+    
+    let new_center = point_reproduction (std_dev) (dimensions circ1) (center circ1) (center circ2) in
+    let new_radius = pos_float_reproduction std_dev (radius circ1) (radius circ2) in
     let new_color = color_reproduction std_dev (color circ1) (color circ2) in
-    (new_center, new_radius, new_color)
+    (dimensions circ1,new_center, new_radius, new_color)
 
   let test_center () =
-    let p1 = make (0.,0.) 3. blue in
-    let p2 = make (1.,2.) 4. red in
-    let p3 = make (3.,4.) 5. green in
+    let p1 = make (100.,100.) (0.,0.) 3. blue in
+    let p2 = make (100.,100.) (1.,2.) 4. red in
+    let p3 = make (100.,100.) (3.,4.) 5. green in
     assert(center p1 = (0., 0.));
     assert(center p2 = (1.,2.));
     assert(center p3 = (3.,4.))
 
   let test_contains () =
-    let c1 = make (1.,0.) 30. blue in
-    let c2 = make (10.,22.) 4. red in
+    let c1 = make (100.,100.) (1.,0.) 30. blue in
+    let c2 = make (100.,100.) (10.,22.) 4. red in
     
     assert (contains c1 (30.,0.));
     assert (not (contains c1 (32., 0.)));
@@ -118,9 +148,9 @@ struct
     assert (not (contains c2 (10., 17.)))
 
   let test_color () =
-    let p1 = make (0.,0.) 3. blue in
-    let p2 = make (1.,2.) 4. red in
-    let p3 = make (3.,4.) 5. green in
+    let p1 = make (100.,100.) (0.,0.) 3. blue in
+    let p2 = make (100.,100.) (1.,2.) 4. red in
+    let p3 = make (100.,100.) (3.,4.) 5. green in
     assert(color p1 = blue);
     let r,g,b = rgb p1 in
     assert(Graphics.rgb r g b = blue);
@@ -139,16 +169,17 @@ struct
     print_endline "######### End of Circle #########"
 
   let equals p1 p2 =
+    dimensions_agree p1 p2 &&
     center p1 = center p2 && radius p1 = radius p2 && color p1 = color p2
 
   let test_sexual_reproduction () =
-    let p1 = make (0.,0.) 3. blue in
-    let p2 = make (1.,2.) 4. red in
-    let p3 = make (3.,4.) 5. green in
+    let p1 = make (100,100) (0.,0.) 3. blue in
+    let p2 = make (100,100) (1.,2.) 4. red in
+    let p3 = make (100,100) (3.,4.) 5. green in
     
-    let r1 = make (0.5,1.) 3.5 (halfway_color blue red) in
-    let r2 = make (2.,3.) 4.5 (halfway_color red green) in
-    let r3 = make (1.5,2.) 4. (halfway_color blue green) in
+    let r1 = make (100,100) (0.5,1.) 3.5 (halfway_color blue red) in
+    let r2 = make (100,100) (2.,3.) 4.5 (halfway_color red green) in
+    let r3 = make (100,100) (1.5,2.) 4. (halfway_color blue green) in
     
     assert(equals (sexual_reproduction 0. p1 p2) r1);
     assert(equals (sexual_reproduction 0. p2 p3) r2);

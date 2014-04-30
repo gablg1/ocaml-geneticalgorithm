@@ -11,9 +11,12 @@ sig
   (* Type of the Genetic Algorithm *)
   type ga
   
-  (* fresh n m returns a fresh new Genetic Algorithm with n guesses 
-   * each containing m legos *)
-  val fresh : int -> int -> ga
+  (* Returns the list of guesses *)
+  val guesses : ga -> guess array
+  
+  (* fresh s n m returns a fresh new Genetic Algorithm with Standard Deviation s
+   * and n guesses each containing m legos *)
+  val fresh : float -> int -> int -> ga
 
   (* 'evolve g n' performs the genetic algorithm for n generations *)
   val evolve : ga -> int -> ga
@@ -34,27 +37,30 @@ sig
   val run_tests : unit -> unit
 end
 
-module MakeGeneticAlgorithm (G : GUESS) : GENETIC_ALGORITHM with type guess = G.guess =
+module MakeImageGeneticAlgorithm (G : GUESS) : GENETIC_ALGORITHM with type guess = G.guess =
 struct
   type guess = G.guess
 
-  type ga = guess array * color array array
+  type ga = float * guess array * color array array
   
-  let guesses (gs,_) = gs
+  let guesses (_,gs,_) = gs
   
-  let target (_,img) = img
+  let target (_,_,img) = img
 
-  let fresh n m =
+  let std_dev (s,_,_) = s
+
+  let fresh s n m =
     (* Placeholder image *)
     let width, height = 100, 100 in
     let target = Array.make_matrix ~dimx:width ~dimy:height 1 in
     
     (* Initializes the random guesses *)
-    (Array.init n ~f:(fun _ -> G.fresh width height m), target)
+    (s, Array.init n ~f:(fun _ -> G.fresh width height m), target)
   
-  let kill_phase _ = failwith "TODO"
+  let kill_phase ga = ga
 
-  let reproduction_phase _ = failwith "TODO"
+  let reproduction_phase (ga : ga) : ga = 
+    (std_dev ga, Array.map ~f:(G.asexual_reproduction (std_dev ga)) (guesses ga), target ga)
   
   (* evolve simply calls kill phase and reproduction phase on g n times *)
   let rec evolve g n =
@@ -70,10 +76,13 @@ struct
     print_endline ""
 
   let run_tests () =
-    print (fresh 3 4);
+    let ga = fresh 10. 1 2 in
+    print (ga);
+    let evolved = evolve ga 10 in
+    print evolved;
     ()
     
 end
 
 (* Applies the functor to make a GeneticAlgorithm using our implementation of Guess *)
-module GeneticAlgorithm : GENETIC_ALGORITHM = MakeGeneticAlgorithm(Guess) 
+module GeneticAlgorithm : GENETIC_ALGORITHM = MakeImageGeneticAlgorithm(Guess) 

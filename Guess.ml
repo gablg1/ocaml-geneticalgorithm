@@ -43,6 +43,9 @@ sig
    * Returns a daughter guess *)
   val sexual_reproduction : float -> guess -> guess -> guess
 
+  (* Same as above but with only one parent guess *)
+  val asexual_reproduction : float -> guess -> guess
+
   (* Returns true if two guesses are equal and false otherwise *)
   val equals : guess -> guess -> bool
 
@@ -83,6 +86,7 @@ struct
     if not (dimensions_agree g1 g2) then raise DimensionTrouble 
     else ((width g1), (height g1), Array.map2_exn ~f:(C.sexual_reproduction std_dev) (legos g1) (legos g2))
   
+  let asexual_reproduction std_dev g1 = sexual_reproduction std_dev g1 g1
   
   let equals g1 g2 = 
     dimensions_agree g1 g2 &&
@@ -95,9 +99,9 @@ struct
     print_endline ""
   
   let test_sexual_reproduction () =
-    let p1 = C.make (0.,0.) 3. blue in
-    let p2 = C.make (1.,2.) 4. red in
-    let p3 = C.make (3.,4.) 5. green in
+    let p1 = C.make (100,100) (0.,0.) 3. blue in
+    let p2 = C.make (100,100) (1.,2.) 4. red in
+    let p3 = C.make (100,100) (3.,4.) 5. green in
     
     let g1 = make 100 100 [p1] in
     let g2 = make 100 100 [p2] in
@@ -107,9 +111,9 @@ struct
     let g6 = make 100 100 [p3; p1] in
     
     (* Answers *)
-    let r1 = C.make (0.5,1.) 3.5 (halfway_color blue red) in
-    let r2 = C.make (2.,3.) 4.5 (halfway_color red green) in
-    let r3 = C.make (1.5,2.) 4. (halfway_color blue green) in
+    let r1 = C.make (100,100) (0.5,1.) 3.5 (halfway_color blue red) in
+    let r2 = C.make (100,100) (2.,3.) 4.5 (halfway_color red green) in
+    let r3 = C.make (100,100) (1.5,2.) 4. (halfway_color blue green) in
     
     assert(equals (sexual_reproduction 0. g1 g2) (make 100 100 [r1]));
     assert(equals (sexual_reproduction 0. g2 g3) (make 100 100 [r2]));
@@ -152,6 +156,8 @@ struct
   let sexual_reproduction std_dev g1 g2 = 
     if not (dimensions_agree g1 g2) then raise DimensionTrouble 
     else ((width g1), (height g1), Array.map2_exn ~f:(P.sexual_reproduction std_dev) (legos g1) (legos g2))
+  
+  let asexual_reproduction std_dev g1 = sexual_reproduction std_dev g1 g1
   
   let equals g1 g2 = 
     dimensions_agree g1 g2 &&
