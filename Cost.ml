@@ -99,20 +99,37 @@ let color_combiner (c1 : color) (c2 : color) : color =
 ;; 
 
 (* creates a black color matrix *) 
-let create_matrix w h : color array array  = Array.make_matrix ~dimx:w ~dimy:h 0 ;; 
+let blank_matrix w h : color array array  = Array.make_matrix ~dimx:w ~dimy:h 0 ;; 
 
 
-(* 
+ 
 (* updates the matrix for each circle that is passed in *)  
-let update_helper (caa : color array array) (c : Circle.circle) : color array array = 
+let matrix_helper (caa : color array array) (c : Circle.circle) : color array array = 
   let n1 = Array.length caa 
   and n2 = Array.length caa.(0) in
   for i = 0 to n1 - 1 do 
   for j = 0 to n2 - 1 do  
   let curr_array = caa.(i) in 
   if Circle.contains c ((float j),(float i)) then 
-  Array.set curr_array j (color_combiner (color c) curr_array.(j)) done done;    
+  Array.set curr_array j (color_combiner (color c) curr_array.(j)) done done;
+  caa ;;     
 
 
+(* takes in a guess and passes out the color matrix that represents that guess *)
+let matrix_of_guess (g : guess) : color array array = 
+  let w = width g in 
+  let h = height g in                      
+  let matrix = blank_matrix w h  in 
+  let circles =  Guess.legos g in 
+  (* can I simply make the function update_helper caa or do I need to pass inthe other argument? *) 
+  Array.fold_right circles ~f:(matrix_helper caa) ~init:0  
+
+
+
+
+(* 
+1. update_helper will take in a circle and then 
+2. update_matrix takes in a guess, and then iterates through the circles using update helper 
+to update the color matrix that we have 
 
  *) 
