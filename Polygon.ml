@@ -38,7 +38,7 @@ sig
   val run_tests : unit -> unit
 end
 
-module Polygon : POLYGON with type polygon=(float * float) array * color =
+module Polygon : POLYGON =
 struct
   
   type polygon = (float * float) array * color

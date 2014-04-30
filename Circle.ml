@@ -71,6 +71,10 @@ struct
 
   let rgb circ = to_rgb (color circ)
 
+  let contains circ (x,y) =
+    let x', y' = center_x circ, center_y circ in
+    (radius circ)**2. >= (x' -. x)**2. +. (y' -. y)**2.
+
   let point_reproduction std_dev p1 p2 =
     let (x,y) = halfway_point p1 p2 in
     (Statistics.gaussian_pick std_dev x, Statistics.gaussian_pick std_dev y)
@@ -99,6 +103,20 @@ struct
     assert(center p2 = (1.,2.));
     assert(center p3 = (3.,4.))
 
+  let test_contains () =
+    let c1 = make (1.,0.) 30. blue in
+    let c2 = make (10.,22.) 4. red in
+    
+    assert (contains c1 (30.,0.));
+    assert (not (contains c1 (32., 0.)));
+    assert (contains c1 (10.,10.));
+    assert (not (contains c1 (30., 30.)));
+    
+    assert (contains c2 (14.,22.));
+    assert (not (contains c2 (14., 23.)));
+    assert (contains c2 (12.,24.));
+    assert (not (contains c2 (10., 17.)))
+
   let test_color () =
     let p1 = make (0.,0.) 3. blue in
     let p2 = make (1.,2.) 4. red in
@@ -113,9 +131,6 @@ struct
     let r,g,b = rgb p3 in
     assert(Graphics.rgb r g b = green)
 
-  let contains circ (x,y) =
-    let x', y' = center_x circ, center_y circ in
-    (radius circ)**2. >= (x' -. x)**2. +. (y' -. y)**2.
 
   (* Prints a circle for testing purposes *)
   let print p =
@@ -143,6 +158,7 @@ struct
     test_center ();
     test_color ();
     test_sexual_reproduction ();
+    test_contains ();
     ()
 
 end
