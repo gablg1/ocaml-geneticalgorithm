@@ -1,137 +1,16 @@
 #load "graphics.cma"
 
+open Core.Std
 open Graphics
 open Array 
-open Core.Std
-open Helper.Helper
+open Helpers
+open Circle 
+
 (*open Images
 open OImages*)
 (* XXX Remember to open the CamlImages file
  * converts a file to an image that we can use *) 
 
-type bitmap_state  = 
-   {w : int; h : int; fg : Graphics.color; bg : Graphics.color;
-    pix : bool array array; s : int} ;;
-
-let create_bitmap x y f g s = 
-   let r = Array.make_matrix x y false in 
-   { w = x; h = y; fg = f;  bg = g; pix = r; s = s} ;;
-
-let draw_pix i j s c = 
-   Graphics.set_color c;
-   Graphics.fill_rect (i*s+1) (j*s+1) (s-1) (s-1) ;;
-
-let draw_bitmap b = 
-   for i=0 to b.w-1 do 
-     for j=0 to b.h-1 do 
-        draw_pix i j b.s (if b.pix.(i).(j) then b.fg else b.bg)
-     done
-   done ;;
-
-let read_file filename = 
-   let ic = open_in filename in 
-     let rec aux () = 
-       try 
-         let line = (input_line ic) in
-         line :: (aux ())
-       with End_of_file -> close_in_noerr ic ; [] 
-   in aux ();;
-
-let read_bitmap filename  = 
-   let r = Array.of_list (read_file filename)  in 
-   let h = Array.length r in 
-   let w = String.length r.(0) in 
-   let b = create_bitmap w h Graphics.black Graphics.white 10 in 
-     for j = 0 to  h - 1 do 
-       for i = 0 to w - 1 do 
-         b.pix.(i).(j) <-  ( r.(j).[i] = '#')
-       done
-     done;
-     b ;;
-
-let write_bitmap filename b = 
-   let oc = open_out filename in
-   let message = "wrote a bitmap" in 
-   fprintf oc "%s\n" message;     
-   let f x = output_char oc (if x then '#' else '-')  in
-   Array.iter b.pix (fun x -> (Array.iter x f); output_char oc '\n');
-   close_out_noerr oc ;;
-
-exception End ;;
-let skel f_init f_end f_key f_mouse f_except = 
-   f_init ();
-   try 
-     while true do 
-       try 
-         let s = Graphics.wait_next_event 
-                   [Graphics.Button_down; Graphics.Key_pressed]  in 
-         if s.Graphics.keypressed 
-         then f_key s.Graphics.key
-         else if s.Graphics.button 
-              then f_mouse s.Graphics.mouse_x s.Graphics.mouse_y
-       with 
-           End -> raise End
-         |  e  -> f_except e
-     done
-   with 
-     End -> f_end () ;;
-
-let start b () = 
-   let sw = 1+b.w*b.s and sh = 1+b.h*b.s in 
-   Graphics.open_graph (" " ^ (string_of_int sw) ^ "x" ^ (string_of_int sh)) ;
-   Graphics.set_color (Graphics.rgb 150 150 150) ;
-   Graphics.fill_rect 0 0 sw sh ;
-   draw_bitmap b ;;
-
-let stop () = Graphics.close_graph() ; exit 0 ;;
-
-let mouse b x y  = 
-   let i,j = (x / b.s),(y/b.s) in 
-   if ( i < b.w ) && ( j < b.h) then 
-     begin
-       b.pix.(i).(j) <- not b.pix.(i).(j) ;
-       draw_pix i j b.s (if b.pix.(i).(j) then b.fg else b.bg)
-     end ;;
-
-let key filename b c = 
-   match c with 
-     'q' | 'Q' -> raise End
-   | 's' | 'S' -> write_bitmap filename b
-   | _ -> () ;;
-
-let go name = 
-   let b =  try   
-              read_bitmap name  
-            with 
-               _ -> create_bitmap 10 10 Graphics.black Graphics.white 10 
-   in skel (start b) stop (key name b) (mouse b) (fun e -> ()) ;;
-
-(*let from_rgb (c : Graphics.color) = 
-let r = c / 65536 and g = c / 256 mod 256 and b = c mod 256 
-in (r,g,b);;
-val from_rgb : Graphics.color -> int * int * int = <fun>*)
-
-(*let file = "hello.bmp" in
-let outfile = "out" ^ file in
-let img = OImages.load file [] in
-let img = OImages.rgb24 img in
-let rgb_vals = img.to_rgb24 in
-Printf.printf "%d" rgb_vals;;
-
-
-let open_image_print i = 
-  let rgb = Graphics.dump_image i in
-  let first_pixel = Array.get (Array.get rgb 0) 0 in
-  Printf.printf "%d" first_pixel in
-open_image_print oimage *)
-
-(*
-(* Opens an image and prints out the first pixel *) 
-fun open_image_print (i : image) : int -> 
-  let image = Graphics.dump_image i in 
-  Array.get 0 (Array.get 0 image) 
-  
- *)
 (* converts a color to an rgb file *)  
  let to_rgb c =
     let r = c / 65536 and g = c / 256 mod 256 and b = c mod 256 in (r,g,b)
@@ -156,7 +35,7 @@ let compare_c_array (ca1 : color array) (ca2 : color array) : int array =
 
 (* compares two color array array point by point and returns an int matrix *) 
 let compare_pixmap (caa1 : color array array) (caa2 : color array array) : int array array = 
-  Array.map2_exn caa1 caa2 ~f:(compare_colors)
+  Array.map2_exn caa1 caa2 ~f:(compare_c_array)
 (*let n1 = Array.length caa1
   and n2 = Array.length caa2 in
   let result = Array.create (max n1 n2) caa1.(0) in
@@ -200,7 +79,7 @@ assert((compare_pixmap blue_list_list red_list_list = [|[|510; 510|]; [|510; 510
 assert((cost_of_mat blue_list_list red_list_list = 510.0));
 assert(( cost_of_mat blue_list_list blue_list_list = 0.0));
 
-let green_list_list = Array.create 2 (Array.create 3 green);; 
+let green_list_list = Array.create 2 (Array.create 3 green) in 
 cost_of_mat blue_list_list green_list_list;;  
 let array1 = Array.create 2 2 in 
 assert(sum_array array1 = 4); 
@@ -220,96 +99,37 @@ let color_combiner (c1 : color) (c2 : color) : color =
 ;; 
 
 (* creates a black color matrix *) 
-let create_matrix w h : color array array  = Array.make_matrix ~dimx:w ~dimy:h 0 ;; 
+let blank_matrix w h : color array array  = Array.make_matrix ~dimx:w ~dimy:h 0 ;; 
 
+
+ 
 (* updates the matrix for each circle that is passed in *)  
-let update_matrix (caa : color array array) (c : circle) : color array array = 
+let matrix_helper (caa : color array array) (c : Circle.circle) : color array array = 
   let n1 = Array.length caa 
   and n2 = Array.length caa.(0) in
   for i = 0 to n1 - 1 do 
   for j = 0 to n2 - 1 do  
-  let curr_array = Array.(i) in 
-  if in_circle c curr_array.(j) then 
-  Array.set curr_array j (color_combiner (color c) curr_array.(j) done;    
+  let curr_array = caa.(i) in 
+  if Circle.contains c ((float j),(float i)) then 
+  Array.set curr_array j (color_combiner (color c) curr_array.(j)) done done;
+  caa ;;     
 
 
-Array.map  (Array.map (fun x -> if 
+(* takes in a guess and passes out the color matrix that represents that guess *)
+let matrix_of_guess (g : guess) : color array array = 
+  let w = width g in 
+  let h = height g in                      
+  let matrix = blank_matrix w h  in 
+  let circles =  Guess.legos g in 
+  (* can I simply make the function update_helper caa or do I need to pass inthe other argument? *) 
+  Array.fold_right circles ~f:(matrix_helper caa) ~init:0  
 
-
- 
-(* 
-4. Create a function that converts a guess to a bitmap 
-
-- Createa function that stores in the width and height, a and then  
-is an array of array that stores all of the data points that we want? 
-       -
-       -  Figure out what are the limitations to the polygon's width and height points
-
-       - Figure out what the equation will be between the polygons (to see whether a certain point is inside or not inside
-       - Create a function that maps through the color array, (Does this color array have points?) (Are the limitations of the 
-         polygon what are defined by the float? 
-
-
-        1. Takes in a guess and gets out the W and H 
-        2. Takes in the width and height and creates a color matrix of white 
-        3. Takes in a circle and then goes through every point in the color matrix, if it is within the circle than we change the color 
- to that of the circle. 
-                - Figure out how to update a matrix 
-                ANS = Array.set 
-        4. If the color is already in the circle, then update it to right in between the two colors 
-                - Create a function that, when takes in two colors gives the average of the two  
-        5. Goes through a guess doing the same thing for each circle 
-
-
-pairs up the points that are closes Is there a way to simplify this even more? Say between two points creates an equation. 
-
-- This will be interesting to represent. I'm still thinking about the best way to 
-go about doing this. 
-
-- Create a function that when taking in two colors averages the two rgb coordinates 
-- Create a function that takes a polygon makes it into a color matrix. 
 
 
 
 (* 
-(* converts guess to an image *) 
-fun make_image (g: guess) : image ->
-XXX Do I want this "image" to actually just be an rmb map of rgb values? 
+1. update_helper will take in a circle and then 
+2. update_matrix takes in a guess, and then iterates through the circles using update helper 
+to update the color matrix that we have 
 
-
-(* Compares guess and image and returns the relative fitness of guess *) 
-fun cost (g : guess) (i : image) : int -> 
-to_rgb will help me compare the rgb values
  *) 
-
-
-(*
-(* takes in two points and gives the equation between them *)  
-let intersecting_line (p1 : int * int) (p2 : int * int) : float -> float = 
-  let (x1, y1) = p1 in 
-  let (x2, y2) = p2 in 
-  fun x -> ( (float (y2 - y1)) /. (float (x2 - x1)) *. (x -. (float x1)) +. (float y1))
-
-
-(* some corner cases have not been solved, i.e.  lines that are 
-straight up *) 
-let equation1 = intersecting_line (0,0) (3,4);;
-assert (equation1 3. = 4.);;
-let equation2 = intersecting_line (0,0) (0, 3);; 
-(* (assert equation2 4. = inf) ;; *) 
-let equation3 = intersecting_line (0,0) (3,0);; 
-assert (equation3 4. = 0.);; 
-
-
-(* takes in a triangle and give back the equations of the intersecting lines *) 
-let triangle_lines (tr : triae) : ('a -> 'a) * ('a -> 'a) * ('a -> 'a) =  
-  let equation1 = intersecting_line (get_point1 tr) (get_point2 tr) in 
-  let equation2 = intersecting_line (get_point1 tr) (get_point3 tr) in 
-  let equation3 = intersecting_line (get_point2 tr) (get_point3 tr) in 
-  (equation1, equation2, equation3)
-
-(* checks to see whether a point is inside a triangle *) 
-let is_in_triangle (tr : triangle) (point : int * int) : bool = 
-
-
-  *) 
