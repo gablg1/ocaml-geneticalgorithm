@@ -11,9 +11,9 @@ sig
   (* Type of the Genetic Algorithm *)
   type ga
   
-  (* fresh n m v returns a fresh new Genetic Algorithm with n guesses 
-   * each containing m polygons with v vertices *)
-  val fresh : int -> int -> int -> ga
+  (* fresh n m returns a fresh new Genetic Algorithm with n guesses 
+   * each containing m legos *)
+  val fresh : int -> int -> ga
 
   (* 'evolve g n' performs the genetic algorithm for n generations *)
   val evolve : ga -> int -> ga
@@ -44,13 +44,13 @@ struct
   
   let target (_,img) = img
 
-  let fresh n m v =
+  let fresh n m =
     (* Placeholder image *)
-    let width, height = 300, 600 in
+    let width, height = 100, 100 in
     let target = Array.make_matrix ~dimx:width ~dimy:height 1 in
     
     (* Initializes the random guesses *)
-    (Array.init n ~f:(fun _ -> G.fresh width height m v), target)
+    (Array.init n ~f:(fun _ -> G.fresh width height m), target)
   
   let kill_phase _ = failwith "TODO"
 
@@ -70,7 +70,7 @@ struct
     print_endline ""
 
   let run_tests () =
-    print (fresh 2 3 4);
+    print (fresh 3 4);
     ()
     
 end
