@@ -25,11 +25,11 @@ sig
   val height : guess -> int
 
   (* Returns list of legos that composes guess *)
-  val legos : guess -> lego array
+  val legos : guess -> lego array 
 
   (* Returns guess as color array array *)
   val matrix_of_guess : guess -> color array array
-  
+
   (* Draws guess to the screen *)
   val draw : guess -> unit
   
@@ -77,6 +77,29 @@ struct
   let height (_,h,_) = h
 
   let make w h lst = (w,h, Array.of_list lst)
+  
+  let dimensions_agree g1 g2 = (width g1 = width g2) && height g1 = height g2
+  
+ (* updates the matrix for each circle that is passed in *)  
+  let insert_circle  (caa : color array array) (c : lego) : color array array = 
+    let n1 = Array.length caa 
+    and n2 = Array.length caa.(0) in
+    for i = 0 to n1 - 1 do 
+    for j = 0 to n2 - 1 do  
+    let curr_array = caa.(i) in 
+    if C.contains c ((float j),(float i)) then 
+    Array.set curr_array j (halfway_color (C.color c) curr_array.(j)) done done;
+    caa ;;     
+
+
+(* takes in a guess and passes out the color matrix that represents that guess *)
+let matrix_of_guess (g : guess) : color array array = 
+  let w = width g in 
+  let h = height g in                      
+  let matrix = blank_matrix w h  in 
+  let circles =  legos g in 
+  (* can I simply make the function update_helper caa or do I need to pass inthe other argument? *) 
+  Array.fold_right circles ~f:(fun c rest -> insert_circle rest c) ~init:matrix  
 
   (* Placeholder *)
   let matrix_of_guess _ = Array.make_matrix ~dimx:5 ~dimy:12 black
@@ -134,9 +157,22 @@ struct
     assert(equals (sexual_reproduction 0. g4 g5) (make 100 100 [r1; r2]));
     assert(equals (sexual_reproduction 0. g4 g6) (make 100 100 [r3; r1]));
     assert(equals (sexual_reproduction 0. g5 g6) (make 100 100 [r2; r3]))
+  
+  (* tests the cost function that we created *) 
+  let test_cost () =  
+
+  let blue_array_array = Array.create 2 (Array.create 2 blue) in 
+  let red_array_array = Array.create 2 (Array.create 2 red) in 
+  
+  assert(cost_of_mat blue_array_array red_array_array = 510.);
+  assert(cost_of_mat blue_array_array blue_array_array = 0.);
+  ()
+
+
 
   let run_tests () =
     test_sexual_reproduction ();
+    test_cost (); 
     () 
 end
 

@@ -52,6 +52,9 @@ sig
   
   (* Returns an array array out of an upside down list list *)
   val matrix_of_list_list_rev : 'a list list -> 'a array array
+  
+  (* creates  a black matrix of width and height w h *) 
+  val blank_matrix : int -> int -> color array array 
 end
 
 (* Implements Helpers *)
@@ -71,7 +74,6 @@ struct
   
   let to_rgb c =
     let r = c / 65536 and g = c / 256 mod 256 and b = c mod 256 in (r,g,b)
-
   let halfway_point (x1,y1) (x2,y2) =
     ((x1 +. x2) /. 2., (y1 +. y2) /. 2.)
     
@@ -113,7 +115,10 @@ struct
   let diff_mat (f : 'a -> 'a -> int) (aa1 : 'a array array) (aa2 : 'a array array) : int = 
     let diffs = Array.map2_exn aa1 aa2 ~f:(diff_array f) in
     sum_array diffs
-  
+   
+  let blank_matrix w h : color array array  = Array.make_matrix ~dimx:w ~dimy:h 0 ;; 
+
+   
 end
 
 
