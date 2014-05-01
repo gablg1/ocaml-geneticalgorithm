@@ -30,6 +30,9 @@ sig
   (* Returns guess as color array array *)
   val matrix_of_guess : guess -> color array array
   
+  (* Draws guess to the screen *)
+  val draw : guess -> unit
+  
   (* Measures the fitness of the guess against the target.
    * The greater the weight (between 0 and MAX_COST) the better. *)
   val cost : guess -> color array array -> float
