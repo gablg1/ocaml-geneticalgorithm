@@ -18,12 +18,12 @@ Graphics.resize_window 500 500;
 
 (* Creates Mona Lisa Genetic Algorithm *)
 let target = matrix_of_list_list_rev MonaLisa.mona_lisa in
-let ga = ref (GeneticAlgorithm.fresh 10. target 1 250) in
+let ga = ref (GeneticAlgorithm.fresh 5. target 1 250) in
 GeneticAlgorithm.print !ga;
 draw target;
 
 let loop () =  
-  ga := GeneticAlgorithm.evolve !ga 10;
+  ga := GeneticAlgorithm.evolve !ga 100;
   GeneticAlgorithm.print !ga;
   GeneticAlgorithm.draw_best !ga;
 in

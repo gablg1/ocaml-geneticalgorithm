@@ -3,7 +3,7 @@ open Graphics
 open Statistics
 open Helpers.Helpers
 
-let max_radius = 20.
+let max_radius = 50.
 
 (* Module that performs operations on Circles *)
 module type CIRCLE =

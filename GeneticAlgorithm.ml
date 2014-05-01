@@ -42,20 +42,22 @@ module MakeImageGeneticAlgorithm1 (G : GUESS) : GENETIC_ALGORITHM with type gues
 struct
   type guess = G.guess
 
-  type ga = float * guess * color array array
+  type ga = float * guess * color array array * float
   
-  let guess (_,gs,_) = gs
+  let guess (_,gs,_,_) = gs
   
   let get_best g = guess g
   
-  let target (_,_,img) = img
+  let target (_,_,img,_) = img
 
-  let std_dev (s,_,_) = s
+  let std_dev (s,_,_,_) = s
+  
+  let last_fitness (_,_,_,f) = f
   
   (* Initializes the random guesses *)
   let fresh s t n m =
     let width, height = get_width t, get_height t in
-    (s, G.fresh width height m, t)
+    (s, G.fresh width height m, t, 0.)
   
   let kill_phase g = g
   
@@ -63,12 +65,12 @@ struct
     let mother = get_best g in
     let daughter = G.asexual_reproduction (std_dev g) mother in
     
-    let fit_mom = G.fitness (target g) mother in
+    let fit_mom = last_fitness g in
     let fit_daughter = G.fitness (target g) daughter in
     
     printf "%f, %f\n" fit_mom fit_daughter;
     
-    if fit_daughter > fit_mom then (std_dev g, daughter, target g)
+    if fit_daughter > fit_mom then (std_dev g, daughter, target g, fit_daughter)
     else g
   
   let rec evolve g n =
