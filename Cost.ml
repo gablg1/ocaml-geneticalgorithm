@@ -3,7 +3,6 @@
 open Core.Std
 open Graphics
 
-
 (*open Images
 open OImages*)
 (* XXX Remember to open the CamlImages file
