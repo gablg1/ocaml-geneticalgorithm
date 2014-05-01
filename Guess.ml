@@ -82,8 +82,6 @@ struct
 
   let make w h lst = (w,h, Array.of_list lst)
   
-  let dimensions_agree g1 g2 = (width g1 = width g2) && height g1 = height g2
-  
  (* updates the matrix for each circle that is passed in *)  
   let insert_circle  (caa : color array array) (c : lego) : color array array = 
     let n1 = Array.length caa 
@@ -168,8 +166,8 @@ struct
   (* tests the cost function that we created *) 
   let test_cost () =  
 
-  let blue_array_array = Array.create 2 (Array.create 2 blue) in 
-  let red_array_array = Array.create 2 (Array.create 2 red) in 
+  let blue_array_array = Array.create ~len:2 (Array.create ~len:2 blue) in 
+  let red_array_array = Array.create ~len:2 (Array.create ~len:2 red) in 
   
   assert(cost_of_mat blue_array_array red_array_array = 510.);
   assert(cost_of_mat blue_array_array blue_array_array = 0.);

@@ -55,7 +55,7 @@ struct
   let last_fitness (_,_,_,f) = f
   
   (* Initializes the random guesses *)
-  let fresh s t n m =
+  let fresh s t _ m =
     let width, height = get_width t, get_height t in
     (s, G.fresh width height m, t, 0.)
   
