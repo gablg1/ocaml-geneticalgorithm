@@ -86,6 +86,7 @@ struct
   
   let to_rgb c =
     let r = c / 65536 and g = c / 256 mod 256 and b = c mod 256 in (r,g,b)
+
   let halfway_point (x1,y1) (x2,y2) =
     ((x1 +. x2) /. 2., (y1 +. y2) /. 2.)
     
@@ -120,7 +121,7 @@ struct
     and n2 = Array.length ca2 in
     if n1 <> n2 then raise DimensionTrouble else
       
-    let result = Array.create (n1) 0 in
+    let result = Array.create ~len:n1 0 in
     for i = 0 to n1 - 1 do result.(i) <- (f ca1.(i) ca2.(i)) done; 
     sum_array result
   

@@ -48,10 +48,6 @@ struct
     let points = Array.init v ~f:(fun _ -> random_point fa fb) in
     (points, random_color ())
 
-  let make_int lst = Array.map ~f:(apply_point Int.of_float) lst
-  
-  let make_float lst = Array.map ~f:(apply_point Float.of_int) lst
-
   let make (lst : (float * float) list) (c : color) = (Array.of_list lst, c)
   
   let points (ps,_) = ps
