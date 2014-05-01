@@ -2,9 +2,6 @@
 
 open Core.Std
 open Graphics
-open Array 
-open Helpers
-open Circle 
 
 (*open Images
 open OImages*)
@@ -31,7 +28,7 @@ let compare_c_array (ca1 : color array) (ca2 : color array) : int array =
   and n2 = Array.length ca2 in
   let result = Array.create (max n1 n2) 0 in
   for i = 0 to n1 - 1 do result.(i) <- (compare_colors ca1.(i) ca2.(i)) done; 
-  result;;
+  result
 
 (* compares two color array array point by point and returns an int matrix *) 
 let compare_pixmap (caa1 : color array array) (caa2 : color array array) : int array array = 
@@ -104,7 +101,7 @@ let blank_matrix w h : color array array  = Array.make_matrix ~dimx:w ~dimy:h 0 
 
  
 (* updates the matrix for each circle that is passed in *)  
-let matrix_helper (caa : color array array) (c : Circle.circle) : color array array = 
+let insert_circle (caa : color array array) (c : Circle.circle) : color array array = 
   let n1 = Array.length caa 
   and n2 = Array.length caa.(0) in
   for i = 0 to n1 - 1 do 
@@ -122,7 +119,7 @@ let matrix_of_guess (g : guess) : color array array =
   let matrix = blank_matrix w h  in 
   let circles =  Guess.legos g in 
   (* can I simply make the function update_helper caa or do I need to pass inthe other argument? *) 
-  Array.fold_right circles ~f:(matrix_helper caa) ~init:0  
+  Array.fold_right circles ~f:(insert_circle caa) ~init:0  
 
 
 

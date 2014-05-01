@@ -3,6 +3,8 @@ open Graphics
 open Statistics
 open Helpers.Helpers
 
+let max_radius = 50.
+
 (* Module that performs operations on Circles *)
 module type CIRCLE =
 sig
@@ -39,6 +41,9 @@ sig
   (* Returns whether circle contains point *)
   val contains : circle -> (float * float) -> bool
   
+  (* asexual_reproduction std_dev c returns a circle daughter of c*)
+  val asexual_reproduction : float -> circle -> circle
+  
   (* 'sexual_reproduction p1 p2 c' returns a circle
    * daughter of p1 and p2 with crossing over level of c *)
   val sexual_reproduction : float -> circle -> circle -> circle
@@ -61,7 +66,7 @@ struct
 
   let fresh a b = 
     let fa, fb = Float.of_int a, Float.of_int b in
-    ((a, b), random_point fa fb, Random.float (max fa fb), random_color ())
+    ((a, b), random_point fa fb, Random.float max_radius, random_color ())
 
   let make dim (ctr : (float * float)) (r : float) (c : color) = (dim,ctr,r,c)
   
@@ -97,9 +102,7 @@ struct
     let x', y' = center_x circ, center_y circ in
     (radius circ)**2. >= (x' -. x)**2. +. (y' -. y)**2.
 
-  let point_reproduction std_dev dim p1 p2 =
-    let (x,y) = halfway_point p1 p2 in
-    
+  let point_reproduction std_dev dim (x,y) =
     let new_x = Statistics.gaussian_pick std_dev x in
     let new_y = Statistics.gaussian_pick std_dev y in
     
@@ -107,23 +110,28 @@ struct
     if valid_point dim (new_x,new_y) then (new_x,new_y)
     else (x,y)
 
-  let color_reproduction std_dev c1 c2 =
-    let f a1 a2 = abs(Int.of_float (Statistics.gaussian_pick std_dev ((Float.of_int (a1 + a2)) /. 2.0))) in
-    let (r1,g1,b1) = to_rgb c1
-    and (r2,g2,b2) = to_rgb c2 in
-    Graphics.rgb (f r1 r2) (f g1 g2) (f b1 b2)
+  let color_reproduction std_dev c1 =
+    let f a = abs(Int.of_float (Statistics.gaussian_pick std_dev (Float.of_int a))) in
+    let (r1,g1,b1) = to_rgb c1 in
+    Graphics.rgb (f r1) (f g1) (f b1)
     
-  let pos_float_reproduction std_dev r1 r2 =
-    let mid_point = (r1 +. r2) /. 2. in
-    Float.abs(Statistics.gaussian_pick std_dev mid_point)
+  let pos_float_reproduction std_dev r1 =
+    let new_f = Float.abs(Statistics.gaussian_pick std_dev r1) in
+    if new_f > max_radius then r1 else new_f
+  
+  let asexual_reproduction std_dev circ1 =
+    let new_center = point_reproduction (std_dev) (dimensions circ1) (center circ1) in
+    let new_radius = pos_float_reproduction std_dev (radius circ1) in
+    let new_color = color_reproduction std_dev (color circ1) in
+    (dimensions circ1,new_center, new_radius, new_color)
   
   let sexual_reproduction std_dev circ1 circ2 = 
     if not (dimensions_agree circ1 circ2) then raise DimensionTrouble else
     
-    let new_center = point_reproduction (std_dev) (dimensions circ1) (center circ1) (center circ2) in
-    let new_radius = pos_float_reproduction std_dev (radius circ1) (radius circ2) in
-    let new_color = color_reproduction std_dev (color circ1) (color circ2) in
-    (dimensions circ1,new_center, new_radius, new_color)
+    let new_center = halfway_point (center circ1) (center circ2) in
+    let new_radius = ((radius circ1) +. (radius circ2)) /. 2. in
+    let new_color =  halfway_color (color circ1) (color circ2) in
+    asexual_reproduction std_dev (dimensions circ1,new_center, new_radius, new_color)
 
   let test_center () =
     let p1 = make (100.,100.) (0.,0.) 3. blue in
