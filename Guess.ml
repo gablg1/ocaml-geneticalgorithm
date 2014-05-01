@@ -77,11 +77,15 @@ struct
   let height (_,h,_) = h
 
   let make w h lst = (w,h, Array.of_list lst)
-  
-  let dimensions_agree g1 g2 = (width g1 = width g2) && height g1 = height g2
 
   (* Placeholder *)
   let matrix_of_guess _ = Array.make_matrix ~dimx:5 ~dimy:12 black
+  
+  let draw g = 
+    let img = Graphics.make_image (matrix_of_guess g) in
+    Graphics.draw_image img 0 0
+  
+  let dimensions_agree g1 g2 = (width g1 = width g2) && height g1 = height g2
 
   (* returns the fitness of a color matrix compared to another color matrix *)   
   let cost_of_mat (caa1 : color array array) (caa2 : color array array) : float = 
@@ -153,6 +157,8 @@ struct
   let width (w,_,_) = w
   
   let height (_,h,_) = h
+
+  let draw = failwith "TODO"
 
   let make w h lst = (w,h, Array.of_list lst)
   

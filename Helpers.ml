@@ -49,12 +49,19 @@ sig
    * aa1 and aa2 where the difference between two elements x y is 
    * given by f x y *)
   val diff_mat : ('a -> 'a -> int) -> 'a array array -> 'a array array -> int
+  
+  (* Returns an array array out of an upside down list list *)
+  val matrix_of_list_list_rev : 'a list list -> 'a array array
 end
 
 (* Implements Helpers *)
 module Helpers : HELPERS  =
 struct
   exception DimensionTrouble
+
+  let matrix_of_list_list_rev ll =
+    let a = Array.of_list (List.rev ll) in
+    Array.map ~f:(fun l -> Array.of_list (l)) a
 
   let valid_point (w,h) (x,y) = x > 0. && y > 0. && x < Float.of_int w && y < Float.of_int h
 
