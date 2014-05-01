@@ -58,7 +58,12 @@ struct
     let width, height = get_width t, get_height t in
     (s, Array.init n ~f:(fun _ -> G.fresh width height m), t)
   
-  let kill_phase ga = ga
+  let fitnesses ga =
+    Array.map ~f:(G.fitness (target ga)) (guesses ga)
+  
+  let kill_phase ga =
+    let new_guesses = Array.init ~f:(fun _ -> weighted_pick (guesses ga) (fitnesses ga)) (Array.length (guesses ga)) in
+    (std_dev ga,new_guesses,target ga)
 
   let reproduction_phase (ga : ga) : ga = 
     (std_dev ga, Array.map ~f:(G.asexual_reproduction (std_dev ga)) (guesses ga), target ga)
@@ -74,7 +79,8 @@ struct
   
   let print ga =
     print_endline "################### Start of Genetic Algorithm ###################";
-    Array.iter ~f:(G.print) (guesses ga);
+    (*Array.iter ~f:(G.print) (guesses ga); *)
+    printf "Fitness of best guess: %f" (G.fitness (target ga) (get_best ga));
     print_endline "################### End of Genetic Algorithm ###################";
     print_endline ""
 

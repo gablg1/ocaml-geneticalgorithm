@@ -4,10 +4,13 @@ open Helpers.Helpers
 open Polygon
 open Circle
 
+let max_fitness = 255. *. 3.
+
 module type GUESS =
 sig
   (* Raised when there is incompatibility of width/height *)
   exception DimensionTrouble
+  exception CostTrouble
 
   (* lego is the building block of the image *)
   type lego
@@ -34,8 +37,8 @@ sig
   val draw : guess -> unit
   
   (* Measures the fitness of the guess against the target.
-   * The greater the weight (between 0 and MAX_COST) the better. *)
-  val cost : guess -> color array array -> float
+   * The smaller the weight (between 0 and max_fitness) the better. *)
+  val fitness : color array array -> guess -> float
 
   (* Makes a new guess out of width, height, and a lego list *)
   val make : int -> int -> lego list -> guess
@@ -62,6 +65,7 @@ end
 module MakeCircleGuess (C : CIRCLE) : GUESS  =
 struct
   exception DimensionTrouble
+  exception CostTrouble
   
   type lego = C.circle
   
@@ -92,14 +96,14 @@ struct
     caa;;     
 
 
-(* takes in a guess and passes out the color matrix that represents that guess *)
-let matrix_of_guess (g : guess) : color array array = 
-  let w = width g in 
-  let h = height g in                      
-  let matrix = blank_matrix w h  in 
-  let circles =  legos g in 
-  (* can I simply make the function update_helper caa or do I need to pass inthe other argument? *) 
-  Array.fold_right circles ~f:(fun c rest -> insert_circle rest c) ~init:matrix
+  (* takes in a guess and passes out the color matrix that represents that guess *)
+  let matrix_of_guess (g : guess) : color array array = 
+    let w = width g in 
+    let h = height g in                      
+    let matrix = blank_matrix w h  in 
+    let circles =  legos g in 
+    
+    Array.fold_right circles ~f:(fun c rest -> insert_circle rest c) ~init:matrix
 
   
   let draw g = 
@@ -114,7 +118,11 @@ let matrix_of_guess (g : guess) : color array array =
     let num_el = count_mat caa1 in
     Float.of_int(cost_mat) /. Float.of_int (num_el)
 
-  let cost guess target = cost_of_mat (matrix_of_guess guess) target
+  let fitness target guess = 
+    let cost = cost_of_mat (matrix_of_guess guess) target in
+    
+    if cost > max_fitness then raise CostTrouble
+    else Float.abs (max_fitness -. cost)
 
   let sexual_reproduction std_dev g1 g2 = 
     if not (dimensions_agree g1 g2) then raise DimensionTrouble 
@@ -173,9 +181,11 @@ let matrix_of_guess (g : guess) : color array array =
     () 
 end
 
+(* Not in use *)
 module MakePolygonGuess (P : POLYGON) : GUESS =
 struct
   exception DimensionTrouble
+  exception CostTrouble
 
   type lego = P.polygon
   type guess = int * int * lego array
@@ -199,7 +209,7 @@ struct
 
   let matrix_of_guess _ = Array.make_matrix ~dimx:5 ~dimy:12 black
 
-  let cost _ _ = failwith "TODO"
+  let fitness _ _ = failwith "TODO"
 
   let sexual_reproduction std_dev g1 g2 = 
     if not (dimensions_agree g1 g2) then raise DimensionTrouble 

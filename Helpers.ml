@@ -64,6 +64,9 @@ sig
   
   (* Draws matrix *)
   val draw : color array array -> unit
+  
+  (* Picks a random element of the array with weighted probability *)
+  val weighted_pick : 'a array -> float array -> 'a 
 end
 
 (* Implements Helpers *)
@@ -134,6 +137,33 @@ struct
   let draw matrix = 
     let img = Graphics.make_image matrix in
     Graphics.draw_image img (100) (100)
+  
+  let normalize arr =
+    let sum = Array.fold_right arr ~f:(+.) ~init:0. in
+    Array.map ~f:(fun x -> x /. sum) arr
+  
+  (* Build cumulative weights list *)  
+  let cumulative_weights a =
+    let (cumul,_) = Array.fold_right ~f:(fun x (lst,f) -> let new_f = f +. x in (new_f :: lst, new_f)) ~init:([],0.) a in
+    cumul
+  
+  let weighted_pick arr weights =
+    if Array.length arr <> Array.length weights then raise DimensionTrouble else
+    let weights = normalize weights in
+    
+    let cumul = cumulative_weights weights in
+    
+    let rand = Random.float 1. in
+    
+    let rec helper lst i =
+      match lst with
+      | [] -> 0
+      | hd :: tl -> if hd > rand then i else helper tl (i + 1)
+    in
+    
+    let index = helper cumul 0 in
+    arr.(index)
+    
 end
 
 

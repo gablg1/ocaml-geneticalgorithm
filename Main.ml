@@ -15,7 +15,6 @@ GeneticAlgorithm.run_tests ();;
 
 Graphics.open_graph " 500x500";
 Graphics.resize_window 500 500;
-Graphics.auto_synchronize false;
 
 (* Creates Mona Lisa Genetic Algorithm *)
 let target = matrix_of_list_list_rev MonaLisa.mona_lisa in
@@ -25,10 +24,6 @@ GeneticAlgorithm.print ga;
 let ga = GeneticAlgorithm.evolve ga 100 in
 GeneticAlgorithm.print ga;
 GeneticAlgorithm.draw_best ga;
-
-
-let color1 = Graphics.rgb 100 150 300 in
-let m = Array.make_matrix 200 400 color1 in
 
 draw target;
 
