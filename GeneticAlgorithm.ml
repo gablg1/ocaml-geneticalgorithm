@@ -82,7 +82,7 @@ struct
   let print ga =
     print_endline "################### Start of Genetic Algorithm ###################";
     (*Array.iter ~f:(G.print) (guesses ga); *)
-    printf "Fitness of best guess: %f" (G.fitness (target ga) (get_best ga));
+    printf "Fitness of best guess: %f\n" (G.fitness (target ga) (get_best ga));
     print_endline "################### End of Genetic Algorithm ###################";
     print_endline ""
 

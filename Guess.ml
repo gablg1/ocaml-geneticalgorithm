@@ -117,7 +117,7 @@ struct
     let num_el = count_mat caa1 in
     Float.of_int(cost_mat) /. Float.of_int (num_el)
 
-  let fitness target guess = 
+  let fitness target guess =  
     let cost = cost_of_mat (matrix_of_guess guess) target in
     
     if cost > max_fitness then raise CostTrouble
@@ -127,8 +127,11 @@ struct
     if not (dimensions_agree g1 g2) then raise DimensionTrouble 
     else ((width g1), (height g1), Array.map2_exn ~f:(C.sexual_reproduction std_dev) (legos g1) (legos g2))
   
+  let random_index arr = Random.int (Array.length arr)
+  
   let asexual_reproduction std_dev g1 =
-    ((width g1), (height g1), Array.map ~f:(C.asexual_reproduction std_dev) (legos g1))
+    let n = random_index (legos g1) in
+    ((width g1), (height g1), Array.mapi ~f:(fun i x -> if i = n then C.asexual_reproduction std_dev x else x) (legos g1))
   
   let equals g1 g2 = 
     dimensions_agree g1 g2 &&

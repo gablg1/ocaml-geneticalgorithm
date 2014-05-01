@@ -4,6 +4,7 @@ open Guess
 open Polygon
 open Statistics
 open MonaLisa
+open Small
 open Helpers.Helpers
 
 (* Initializes randomness using current timestamp *)
@@ -18,7 +19,7 @@ Graphics.resize_window 500 500;
 
 (* Creates Mona Lisa Genetic Algorithm *)
 let target = matrix_of_list_list_rev MonaLisa.mona_lisa in
-let ga = ref (GeneticAlgorithm.fresh 5. target 1 250) in
+let ga = ref (GeneticAlgorithm.fresh 1. target 1 50) in
 GeneticAlgorithm.print !ga;
 draw target;
 
