@@ -2,10 +2,6 @@
 
 open Core.Std
 open Graphics
-open Array 
-open Helpers
-open Circle 
-open Images
 
 (*open Images
 open OImages*)
@@ -32,7 +28,7 @@ let compare_c_array (ca1 : color array) (ca2 : color array) : int array =
   and n2 = Array.length ca2 in
   let result = Array.create (max n1 n2) 0 in
   for i = 0 to n1 - 1 do result.(i) <- (compare_colors ca1.(i) ca2.(i)) done; 
-  result;;
+  result
 
 (* compares two color array array point by point and returns an int matrix *) 
 let compare_pixmap (caa1 : color array array) (caa2 : color array array) : int array array = 

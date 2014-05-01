@@ -32,7 +32,7 @@ sig
   
   (* Measures the fitness of the guess against the target.
    * The greater the weight (between 0 and MAX_COST) the better. *)
-  val cost : guess -> image -> float
+  val cost : guess -> color array array -> float
 
   (* Makes a new guess out of width, height, and a lego list *)
   val make : int -> int -> lego list -> guess
@@ -80,7 +80,13 @@ struct
   (* Placeholder *)
   let matrix_of_guess _ = Array.make_matrix ~dimx:5 ~dimy:12 black
 
-  let cost _ _ = failwith "TODO"
+  (* returns the fitness of a color matrix compared to another color matrix *)   
+  let cost_of_mat (caa1 : color array array) (caa2 : color array array) : float = 
+    let cost_mat = diff_mat diff_color caa1 caa2 in 
+    let num_el = count_mat caa1 in
+    Float.of_int(cost_mat) /. Float.of_int (num_el)
+
+  let cost guess target = cost_of_mat (matrix_of_guess guess) target
 
   let sexual_reproduction std_dev g1 g2 = 
     if not (dimensions_agree g1 g2) then raise DimensionTrouble 
