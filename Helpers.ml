@@ -55,6 +55,15 @@ sig
   
   (* creates  a black matrix of width and height w h *) 
   val blank_matrix : int -> int -> color array array 
+  
+  (* Returns width of color array array *)
+  val get_width : color array array -> int
+  
+  (* Returns height of color array array *)
+  val get_height : color array array -> int
+  
+  (* Draws matrix *)
+  val draw : color array array -> unit
 end
 
 (* Implements Helpers *)
@@ -116,9 +125,15 @@ struct
     let diffs = Array.map2_exn aa1 aa2 ~f:(diff_array f) in
     sum_array diffs
    
-  let blank_matrix w h : color array array  = Array.make_matrix ~dimx:w ~dimy:h 0 ;; 
+  let blank_matrix w h : color array array  = Array.make_matrix ~dimx:h ~dimy:w 0 
 
-   
+  let get_width caa = Array.length caa.(0)
+  
+  let get_height caa = Array.length caa
+  
+  let draw matrix = 
+    let img = Graphics.make_image matrix in
+    Graphics.draw_image img (100) (100)
 end
 
 

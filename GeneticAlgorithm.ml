@@ -1,5 +1,6 @@
 open Core.Std
 open Guess
+open Helpers.Helpers
 open Graphics
 
 (* Signature of a generic Genetic Algorithm Module *)
@@ -16,7 +17,7 @@ sig
   
   (* fresh s n m returns a fresh new Genetic Algorithm with Standard Deviation s
    * and n guesses each containing m legos *)
-  val fresh : float -> int -> int -> ga
+  val fresh : float -> color array array -> int -> int -> ga
 
   (* 'evolve g n' performs the genetic algorithm for n generations *)
   val evolve : ga -> int -> ga
@@ -29,6 +30,9 @@ sig
   
   (* Returns the current best guess of this model *)
   val get_best : ga -> guess
+  
+  (* Draws the best guess of this model *)
+  val draw_best : ga -> unit
   
   (* Prints the current state of this genetic algorithm *)
   val print : ga -> unit
@@ -48,14 +52,11 @@ struct
   let target (_,_,img) = img
 
   let std_dev (s,_,_) = s
-
-  let fresh s n m =
-    (* Placeholder image *)
-    let width, height = 100, 100 in
-    let target = Array.make_matrix ~dimx:width ~dimy:height 1 in
-    
-    (* Initializes the random guesses *)
-    (s, Array.init n ~f:(fun _ -> G.fresh width height m), target)
+  
+  (* Initializes the random guesses *)
+  let fresh s t n m =
+    let width, height = get_width t, get_height t in
+    (s, Array.init n ~f:(fun _ -> G.fresh width height m), t)
   
   let kill_phase ga = ga
 
@@ -67,8 +68,10 @@ struct
     if n <= 0 then g 
     else evolve (reproduction_phase (kill_phase g)) (n - 1)
 
-  let get_best _ = failwith "TODO" 
-
+  let get_best g = (guesses g).(0)
+  
+  let draw_best g = G.draw (get_best g)
+  
   let print ga =
     print_endline "################### Start of Genetic Algorithm ###################";
     Array.iter ~f:(G.print) (guesses ga);
@@ -76,10 +79,11 @@ struct
     print_endline ""
 
   let run_tests () =
-    let ga = fresh 10. 1 2 in
+   (* Since this is a probabilistic model, we test by printing *)
+   (* let ga = fresh 10. 1 2 in
     print (ga);
     let evolved = evolve ga 10 in
-    print evolved;
+    print evolved;*)
     ()
     
 end

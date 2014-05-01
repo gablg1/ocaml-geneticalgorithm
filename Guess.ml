@@ -89,7 +89,7 @@ struct
     let curr_array = caa.(i) in 
     if C.contains c ((float j),(float i)) then 
     Array.set curr_array j (halfway_color (C.color c) curr_array.(j)) done done;
-    caa ;;     
+    caa;;     
 
 
 (* takes in a guess and passes out the color matrix that represents that guess *)
@@ -99,14 +99,12 @@ let matrix_of_guess (g : guess) : color array array =
   let matrix = blank_matrix w h  in 
   let circles =  legos g in 
   (* can I simply make the function update_helper caa or do I need to pass inthe other argument? *) 
-  Array.fold_right circles ~f:(fun c rest -> insert_circle rest c) ~init:matrix  
+  Array.fold_right circles ~f:(fun c rest -> insert_circle rest c) ~init:matrix
 
-  (* Placeholder *)
-  let matrix_of_guess _ = Array.make_matrix ~dimx:5 ~dimy:12 black
   
   let draw g = 
     let img = Graphics.make_image (matrix_of_guess g) in
-    Graphics.draw_image img 0 0
+    Graphics.draw_image img 100 300
   
   let dimensions_agree g1 g2 = (width g1 = width g2) && height g1 = height g2
 
@@ -130,6 +128,7 @@ let matrix_of_guess (g : guess) : color array array =
   
   let print g =
     print_endline "################ Start of Guess ################";
+    printf "Width: %i Height: %i\n" (width g) (height g);
     Array.iter ~f:(C.print) (legos g);
     print_endline "################ End of Guess ################";
     print_endline ""
@@ -167,8 +166,6 @@ let matrix_of_guess (g : guess) : color array array =
   assert(cost_of_mat blue_array_array red_array_array = 510.);
   assert(cost_of_mat blue_array_array blue_array_array = 0.);
   ()
-
-
 
   let run_tests () =
     test_sexual_reproduction ();
