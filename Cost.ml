@@ -5,6 +5,7 @@ open Graphics
 open Array 
 open Helpers
 open Circle 
+open Images
 
 (*open Images
 open OImages*)

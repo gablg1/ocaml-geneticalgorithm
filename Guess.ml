@@ -3,7 +3,6 @@ open Graphics
 open Helpers.Helpers
 open Polygon
 open Circle
-open Cost
 
 module type GUESS =
 sig
