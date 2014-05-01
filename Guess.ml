@@ -37,7 +37,7 @@ sig
   val draw : guess -> unit
   
   (* Measures the fitness of the guess against the target.
-   * The smaller the weight (between 0 and max_fitness) the better. *)
+   * The greater the weight (between 0 and max_fitness) the better. *)
   val fitness : color array array -> guess -> float
 
   (* Makes a new guess out of width, height, and a lego list *)
@@ -105,7 +105,6 @@ struct
     
     Array.fold_right circles ~f:(fun c rest -> insert_circle rest c) ~init:matrix
 
-  
   let draw g = 
     let img = Graphics.make_image (matrix_of_guess g) in
     Graphics.draw_image img 100 300
@@ -128,7 +127,8 @@ struct
     if not (dimensions_agree g1 g2) then raise DimensionTrouble 
     else ((width g1), (height g1), Array.map2_exn ~f:(C.sexual_reproduction std_dev) (legos g1) (legos g2))
   
-  let asexual_reproduction std_dev g1 = sexual_reproduction std_dev g1 g1
+  let asexual_reproduction std_dev g1 =
+    ((width g1), (height g1), Array.map ~f:(C.asexual_reproduction std_dev) (legos g1))
   
   let equals g1 g2 = 
     dimensions_agree g1 g2 &&
